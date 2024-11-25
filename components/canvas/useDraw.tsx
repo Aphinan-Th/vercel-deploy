@@ -7,6 +7,7 @@ export const useDraw = () => {
     drawDetail: DrawDetail,
     text?: string
   ) => {
+    console.log("drawHorizontalLine", text);
     if (canvasContext == null) return;
     canvasContext.moveTo(0, drawDetail.startY);
     canvasContext.lineTo(imageWidth, drawDetail.startY);
