@@ -13,7 +13,7 @@ export default function SampleImages({ steps, currentStep }: SampleImagesProps) 
 	const { pointName, description } = steps[currentStep];
 
 	const getFile = (pointName: PointName) =>
-		pointName === PointName.MeToLr ? `/assets/images/sample/Me.webp` : `/assets/images/sample/${pointName}.webp`;
+		pointName === PointName.MeToLr ? `/assets/images/samples/Me.webp` : `/assets/images/samples/${pointName}.webp`;
 
 	if (pointName === PointName.FrankfortPlane || pointName === PointName.Distance) {
 		return (
