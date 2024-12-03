@@ -18,10 +18,13 @@ import {
 	dentureFrameHeaders,
 	dentureFrameData,
 } from "./masterData";
-import ActionButtons from "@/components/actionButtons"; // New component for buttons
+import ActionButtons from "@/components/actionButtons";
 import { steps } from "./steps";
 import { CanvasRef, Result } from "@/components/canvas/type";
 import SampleImages from "@/components/sampleImages";
+import html2canvas from "html2canvas";
+import JSZip from "jszip";
+import Link from "next/link";
 
 const Diagnosis: React.FC = () => {
 	const canvasRef = useRef<CanvasRef | null>(null);
@@ -52,6 +55,49 @@ const Diagnosis: React.FC = () => {
 		setSelectedImage(file);
 	};
 
+	const generateZipFile = async () => {
+		const imageFile = await generateImage();
+		const jsonFile = generateJsonFile();
+
+		if (imageFile && jsonFile) {
+			const zip = new JSZip();
+
+			zip.file("canvas_point.json", jsonFile);
+			zip.file("cephalometric_result.png", imageFile);
+
+			const zipBlob = await zip.generateAsync({ type: "blob" });
+			triggerDownload(zipBlob, "result.zip");
+		}
+	};
+
+	const generateImage = async (): Promise<Blob | null> => {
+		if (canvasRef.current?.current != null) {
+			const canvas = await html2canvas(canvasRef.current.current);
+			const imageData = canvas.toDataURL("image/png");
+			const imageBlob = await (await fetch(imageData)).blob();
+			return imageBlob;
+		} else {
+			return null;
+		}
+	};
+
+	const triggerDownload = (blob: Blob, filename: string) => {
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = filename;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+	};
+
+	const generateJsonFile = (): string => {
+		const rawData = canvasRef.current?.drawingActions;
+		const jsonString = JSON.stringify(rawData, null, 2);
+		return jsonString;
+	};
+
 	const renderTableRow = (row: (string | null)[], rowIndex: number, textColor: string) => (
 		<tr key={rowIndex} className="bg-white border-b border-t">
 			{row.map((cell, cellIndex) => (
@@ -76,82 +122,105 @@ const Diagnosis: React.FC = () => {
 	);
 
 	return (
-		<div className="bg-white px-10 py-10">
-			<div className="flex flex-row gap-1 pb-2 border-b mb-2 items-center">
-				<h1 className="text-3xl text-blue-400 font-bold pr-6">Diagnosis</h1>
-				<ActionButtons
-					clearAll={clearAll}
-					clearCanvas={clearCanvasDrawing}
-					rotateImageUp={() => setAngle((a) => a + 0.005)}
-					rotateImageDown={() => setAngle((a) => a - 0.005)}
-					prevStep={() => setCurrentStep((s) => Math.max(s - 1, 0))}
-				/>
-			</div>
-			<div className="flex items-start h-screen bg-white gap-5">
-				<Stepper steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
-				<div className="h-full flex flex-col w-1/2">
-					{selectedImage ? (
-						<div className="flex flex-row">
-							<Canvas
-								ref={canvasRef}
-								imageFile={selectedImage}
-								imageAngle={angle}
-								steps={steps}
-								currentStep={currentStep}
-								setCurrentStep={setCurrentStep}
-								updatePxToCen={setPxToCen}
-								resetAngle={() => setAngle(0)}
-								setResult={setResult}
-							/>
-						</div>
-					) : (
-						<div className="h-full flex items-center bg-gray-50 text-gray-800 flex-col">
-							<ImageSelector onImageDataChange={handleFileSelect} />
-						</div>
-					)}
+		<div className="min-h-screen">
+			<nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b">
+				<div className="container mx-auto px-4 md:px-6">
+					<div className="flex items-center justify-between h-16">
+						<Link className="text-xl font-bold " href="/">
+							CephaloMetric
+						</Link>
+					</div>
 				</div>
-				<div className="h-full overflow-auto">
-					<div className="overflow-x-auto">
-						<div className="flex flex-col">
-							{currentStep === steps.length ? (
-								<table className="w-full text-sm text-left rtl:text-right text-gray-500 border-t border-gray-300 table-auto">
-									<tbody>
-										{renderTable(
-											measurementHeaders,
-											measurementData(result),
-											"bg-red-200",
-											"text-red-500"
-										)}
-										{renderTable(
-											skeletalHeaders,
-											skeletalData(result),
-											"bg-blue-200",
-											"text-blue-500"
-										)}
-										{renderTable(toothHeaders, toothData(result), "bg-green-200", "text-green-500")}
-										{renderTable(
-											labialHeaders,
-											labialData(result),
-											"bg-orange-200",
-											"text-orange-500"
-										)}
-										{renderTable(
-											surgicalHeaders,
-											surgicalTendencyData(result),
-											"bg-purple-200",
-											"text-purple-500"
-										)}
-										{renderTable(
-											dentureFrameHeaders,
-											dentureFrameData(result),
-											"bg-indigo-200",
-											"text-indigo-500"
-										)}
-									</tbody>
-								</table>
-							) : (
-								<SampleImages steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
-							)}
+			</nav>
+			<div className="px-10 min-h-screen items-center justify-center py-24">
+				<div className="flex flex-row gap-1 pb-2 border-b mb-2 items-center">
+					<Link className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500 text-center leading-tight w-fit pr-6" href={"/"}>
+						Diagnosis
+					</Link>
+					<ActionButtons
+						clearAll={clearAll}
+						clearCanvas={clearCanvasDrawing}
+						rotateImageUp={() => setAngle((a) => a + 0.005)}
+						rotateImageDown={() => setAngle((a) => a - 0.005)}
+						prevStep={() => setCurrentStep((s) => Math.max(s - 1, 0))}
+						saveResult={generateZipFile}
+					/>
+				</div>
+				<div className="flex items-start h-screen bg-white gap-5">
+					<Stepper steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
+					<div className="h-full flex flex-col w-1/2">
+						{selectedImage ? (
+							<div className="flex flex-row">
+								<Canvas
+									ref={canvasRef}
+									imageFile={selectedImage}
+									imageAngle={angle}
+									steps={steps}
+									currentStep={currentStep}
+									setCurrentStep={setCurrentStep}
+									updatePxToCen={setPxToCen}
+									resetAngle={() => setAngle(0)}
+									setResult={setResult}
+								/>
+							</div>
+						) : (
+							<div className="h-full flex items-center bg-gray-50 text-gray-800 flex-col">
+								<ImageSelector onImageDataChange={handleFileSelect} />
+							</div>
+						)}
+					</div>
+					<div className="h-full overflow-auto">
+						<div className="overflow-x-auto">
+							<div className="flex flex-col">
+								{currentStep === steps.length ? (
+									<table className="w-full text-sm text-left rtl:text-right text-gray-500 border-t border-gray-300 table-auto">
+										<tbody>
+											{renderTable(
+												measurementHeaders,
+												measurementData(result),
+												"bg-red-200",
+												"text-red-500"
+											)}
+											{renderTable(
+												skeletalHeaders,
+												skeletalData(result),
+												"bg-blue-200",
+												"text-blue-500"
+											)}
+											{renderTable(
+												toothHeaders,
+												toothData(result),
+												"bg-green-200",
+												"text-green-500"
+											)}
+											{renderTable(
+												labialHeaders,
+												labialData(result),
+												"bg-orange-200",
+												"text-orange-500"
+											)}
+											{renderTable(
+												surgicalHeaders,
+												surgicalTendencyData(result),
+												"bg-purple-200",
+												"text-purple-500"
+											)}
+											{renderTable(
+												dentureFrameHeaders,
+												dentureFrameData(result),
+												"bg-indigo-200",
+												"text-indigo-500"
+											)}
+										</tbody>
+									</table>
+								) : (
+									<SampleImages
+										steps={steps}
+										currentStep={currentStep}
+										setCurrentStep={setCurrentStep}
+									/>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>

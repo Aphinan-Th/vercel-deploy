@@ -19,6 +19,8 @@ export type Style = {
 
 export type CanvasHandler = {
 	clearDraw: () => void;
+	current: HTMLElement | null;
+	drawingActions: DrawDetail[];
 };
 
 export type CanvasProps = {

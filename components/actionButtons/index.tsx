@@ -4,6 +4,7 @@ import { RotateLeftIcon } from "@/public/assets/icons/rotateLeftIcon";
 import { RotateRightIcon } from "@/public/assets/icons/rotateRightIcon";
 import { CleanIcon } from "@/public/assets/icons/cleanIcon";
 import { UndoIcon } from "@/public/assets/icons/undoIcon";
+import { SaveImageIcon } from "@/public/assets/icons/saveImageIcon";
 
 interface ActionButtonsProps {
 	clearAll: () => void;
@@ -11,6 +12,7 @@ interface ActionButtonsProps {
 	rotateImageUp: () => void;
 	rotateImageDown: () => void;
 	prevStep: () => void;
+	saveResult: () => void;
 }
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({
@@ -19,6 +21,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 	rotateImageUp,
 	rotateImageDown,
 	prevStep,
+	saveResult,
 }) => {
 	return (
 		<div className="flex gap-1">
@@ -51,6 +54,12 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 				className="flex rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 gap-1 cursor-pointer text-gray-700"
 			>
 				<UndoIcon width="24" height="24" /> Undo
+			</div>
+			<div
+				onClick={saveResult}
+				className="flex rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 gap-1 cursor-pointer text-gray-700"
+			>
+				<SaveImageIcon width="24" height="24" /> Save
 			</div>
 		</div>
 	);

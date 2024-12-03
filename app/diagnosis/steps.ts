@@ -4,13 +4,6 @@ import { Step } from "./type";
 
 export const steps: Step[] = [
 	{
-		title: "Frankfort plane.",
-		description: "Rotate the image to plot the Frankfort plane.",
-		pointName: PointName.FrankfortPlane,
-		type: DrawType.FrankfortPlane,
-		isCompleted: false,
-	},
-	{
 		title: "Define 1 cm",
 		description: "Set two points, 1 cm apart",
 		pointName: PointName.Distance,

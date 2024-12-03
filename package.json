@@ -9,6 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "lucide-react": "^0.446.0",
+    "fabric": "^6.2.0",
+    "fabricjs-react": "^2.0.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.2",
+    "class-variance-authority": "^0.7.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "html2canvas": "^1.4.1",
+    "jszip": "^3.10.1",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18"
