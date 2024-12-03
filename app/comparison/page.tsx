@@ -10,7 +10,7 @@ import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
-export default function ComparePage({ reference }: { reference: React.RefObject<HTMLDivElement> }) {
+export default function ComparePage() {
 	const [imageBefore, setImageBefore] = useState<File | null>(null);
 	const [imageAfter, setImageAfter] = useState<File | null>(null);
 	const { editor, onReady } = useFabricJSEditor();
@@ -119,12 +119,11 @@ export default function ComparePage({ reference }: { reference: React.RefObject<
 					</div>
 				</div>
 			</nav>
-			<SectionWrapper
-				reference={reference}
-				className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50"
-			>
+			<SectionWrapper className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
 				<div className="w-full h-full bg-white rounded-lg shadow-lg p-8">
-					<h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500 text-center leading-tight w-fit">Compare Your Images</h1>
+					<h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500 text-center leading-tight w-fit">
+						Compare Your Images
+					</h1>
 					<div className="hidden md:flex items-center justify-end space-x-8">
 						<Button
 							variant="ghost"
