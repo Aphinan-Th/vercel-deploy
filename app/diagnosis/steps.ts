@@ -123,10 +123,17 @@ export const steps: Step[] = [
 		isCompleted: false,
 	},
 	{
-		title: "Ramus plane",
-		description: "Set start line from Go",
-		pointName: PointName.RamusPlane,
-		type: DrawType.Line,
+		title: "P1",
+		description: "Set point of P1",
+		pointName: PointName.P1,
+		type: DrawType.Dot,
+		isCompleted: false,
+	},
+	{
+		title: "P2",
+		description: "Set point of P2",
+		pointName: PointName.P2,
+		type: DrawType.Dot,
 		isCompleted: false,
 	},
 	{

@@ -30,8 +30,8 @@ export default function AboutSection({ reference }: { reference: React.RefObject
 					<Image
 						src="/assets/images/model.webp"
 						alt="Dental Technology"
-						layout="fill"
-						objectFit="cover"
+						fill
+						style={{ objectFit: "cover" }}
 					/>
 				</div>
 			</div>

@@ -1,10 +1,7 @@
 import React from "react";
-import { TrashIcon } from "@/public/assets/icons/trashIcon";
-import { RotateLeftIcon } from "@/public/assets/icons/rotateLeftIcon";
-import { RotateRightIcon } from "@/public/assets/icons/rotateRightIcon";
-import { CleanIcon } from "@/public/assets/icons/cleanIcon";
-import { UndoIcon } from "@/public/assets/icons/undoIcon";
-import { SaveImageIcon } from "@/public/assets/icons/saveImageIcon";
+import { Button } from "../ui/button";
+
+import { Save, Undo2, RotateCcw, RotateCw, Eraser, Trash2 } from "lucide-react";
 
 interface ActionButtonsProps {
 	clearAll: () => void;
@@ -25,42 +22,24 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 }) => {
 	return (
 		<div className="flex gap-1">
-			<div
-				onClick={clearAll}
-				className="rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 cursor-pointer"
-			>
-				<TrashIcon width="24" height="24" />
-			</div>
-			<div
-				onClick={clearCanvas}
-				className="rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 cursor-pointer"
-			>
-				<CleanIcon width="24" height="24" />
-			</div>
-			<div
-				onClick={rotateImageDown}
-				className="rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 cursor-pointer"
-			>
-				<RotateLeftIcon width="24" height="24" />
-			</div>
-			<div
-				onClick={rotateImageUp}
-				className="rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 cursor-pointer"
-			>
-				<RotateRightIcon width="24" height="24" />
-			</div>
-			<div
-				onClick={prevStep}
-				className="flex rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 gap-1 cursor-pointer text-gray-700"
-			>
-				<UndoIcon width="24" height="24" /> Undo
-			</div>
-			<div
-				onClick={saveResult}
-				className="flex rounded-lg border hover:bg-blue-200 hover:border-blue-400 transition p-1 gap-1 cursor-pointer text-gray-700"
-			>
-				<SaveImageIcon width="24" height="24" /> Save
-			</div>
+			<Button variant="ghost" onClick={clearAll} className="text-gray-600 hover:text-gray-900 gap-1">
+				<Trash2 width="24" height="24" /> Remove Image
+			</Button>
+			<Button variant="ghost" onClick={clearCanvas} className="text-gray-600 hover:text-gray-900 gap-1">
+				<Eraser width="24" height="24" /> Clean Canvas
+			</Button>
+			<Button variant="ghost" onClick={rotateImageDown} className="text-gray-600 hover:text-gray-900 gap-1">
+				<RotateCcw width="24" height="24" /> Rotate Left
+			</Button>
+			<Button variant="ghost" onClick={rotateImageUp} className="text-gray-600 hover:text-gray-900 gap-1">
+				<RotateCw width="24" height="24" /> Rotate Right
+			</Button>
+			<Button variant="ghost" onClick={prevStep} className="text-gray-600 hover:text-gray-900 gap-1">
+				<Undo2 width="24" height="24" /> Undo
+			</Button>
+			<Button variant="ghost" onClick={saveResult} className="text-gray-600 hover:text-gray-900 gap-1">
+				<Save width="24" height="24" /> Save
+			</Button>
 		</div>
 	);
 };

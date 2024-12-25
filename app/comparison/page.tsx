@@ -37,7 +37,7 @@ export default function ComparePage() {
 				.then((img: fabric.Image) => {
 					const existingImage = editor?.canvas
 						.getObjects()
-						.find((obj) => obj instanceof fabric.Image && obj.get("customType") === customType);
+						.find((obj) => obj instanceof FabricImage && obj.get("customType") === customType);
 
 					if (existingImage) {
 						editor?.canvas.remove(existingImage);

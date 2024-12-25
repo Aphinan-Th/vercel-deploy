@@ -29,7 +29,6 @@ export type CanvasProps = {
 	steps: Step[];
 	currentStep: number;
 	setCurrentStep: Dispatch<SetStateAction<number>>;
-	updatePxToCen: (distance: number) => void;
 	resetAngle: () => void;
 	setResult: Dispatch<SetStateAction<Result>>;
 };
