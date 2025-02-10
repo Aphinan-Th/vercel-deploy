@@ -38,7 +38,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ onImageDataChange: onImag
     };
 
     return (
-        <div className="w-full h-full flex items-center justify-center bg-blue-50 flex-col" onClick={handleSectionClick}>
+        <div className="w-[600px] h-[600px] flex items-center justify-center bg-blue-50 flex-col" onClick={handleSectionClick}>
             <h2 className="text-gray-400">Drop your x-ray image</h2>
             <input
                 accept="image/*"

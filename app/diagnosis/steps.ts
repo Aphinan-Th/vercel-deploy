@@ -1,5 +1,5 @@
 
-import { DrawType, PointName } from "@/components/canvas/enum";
+import { PointName, DrawType } from "./model/enum";
 import { Step } from "./type";
 
 export const steps: Step[] = [
@@ -8,20 +8,6 @@ export const steps: Step[] = [
 		description: "Set two points, 1 cm apart",
 		pointName: PointName.Distance,
 		type: DrawType.SetPxDistance,
-		isCompleted: false,
-	},
-	{
-		title: "S",
-		description: "Set point of S",
-		pointName: PointName.S,
-		type: DrawType.Dot,
-		isCompleted: false,
-	},
-	{
-		title: "N",
-		description: "Set point of N",
-		pointName: PointName.N,
-		type: DrawType.Dot,
 		isCompleted: false,
 	},
 	{
@@ -35,6 +21,20 @@ export const steps: Step[] = [
 		title: "Or",
 		description: "Set point of Or",
 		pointName: PointName.Or,
+		type: DrawType.Dot,
+		isCompleted: false,
+	},
+	{
+		title: "S",
+		description: "Set point of S",
+		pointName: PointName.S,
+		type: DrawType.Dot,
+		isCompleted: false,
+	},
+	{
+		title: "N",
+		description: "Set point of N",
+		pointName: PointName.N,
 		type: DrawType.Dot,
 		isCompleted: false,
 	},

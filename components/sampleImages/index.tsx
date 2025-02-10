@@ -1,26 +1,19 @@
-import { Step } from "@/app/diagnosis/type";
-import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
-import { PointName } from "../canvas/enum";
+import { StateDescriptionModel } from "@/app/diagnosis/states/cephaloState";
+import { PointName } from "@/app/diagnosis/model/enum";
 
 interface SampleImagesProps {
-	steps: Step[];
-	currentStep: number;
-	setCurrentStep: Dispatch<SetStateAction<number>>;
+	currentStep: StateDescriptionModel;
 }
 
-export default function SampleImages({ steps, currentStep }: SampleImagesProps) {
-	const { pointName, description } = steps[currentStep];
+export default function SampleImages({ currentStep }: SampleImagesProps) {
 
-	const getFile = (pointName: PointName) =>
-		pointName === PointName.MeToLr ? `/assets/images/sample/Me.webp` : `/assets/images/sample/${pointName}.webp`;
-
-	if (pointName === PointName.FrankfortPlane || pointName === PointName.Distance) {
+	if (currentStep.pointName === PointName.Distance) {
 		return (
 			<div>
 				<h1 className="text-gray-700 text-lg font-bold pb-2">Sample image</h1>
-				<p className="text-gray-700 text-sm">Point Name: {pointName}</p>
-				<p className="text-gray-700 text-sm">Description: {description}</p>
+				<p className="text-gray-700 text-sm">Point Name: {currentStep.title}</p>
+				<p className="text-gray-700 text-sm">Description: {currentStep.description}</p>
 				<div className="flex justify-center items-center text-center w-[500px] h-[500px] bg-gray-50 rounded-lg mt-4 shadow-3">
 					<p className="text-gray-400 text-lg font-bold">No sample image</p>
 				</div>
@@ -31,12 +24,13 @@ export default function SampleImages({ steps, currentStep }: SampleImagesProps) 
 	return (
 		<div>
 			<h1 className="text-gray-700 text-lg font-bold pb-2">Sample image</h1>
-			<p className="text-gray-700 text-sm">Point Name: {pointName}</p>
-			<p className="text-gray-700 text-sm">Description: {description}</p>
+			<p className="text-gray-700 text-sm">Point Name: {currentStep.pointName}</p>
+			<p className="text-gray-700 text-sm">Description: {currentStep.description}</p>
 			<Image
 				className="mt-4 shadow-3 rounded-md"
-				src={getFile(pointName)}
-				alt={`Step ${currentStep + 1} image`}
+				src={currentStep.imagePath}
+				alt={`Step ${currentStep.title} image`}
+				style={{ width: "auto", height: "auto" }}
 				width={500}
 				height={500}
 			/>

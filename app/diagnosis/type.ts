@@ -1,5 +1,5 @@
-import { DrawType, PointName } from "@/components/canvas/enum";
-import { DrawDetail } from "@/components/canvas/type";
+import { DrawType, PointName } from "./model/enum";
+import { DrawDetail } from "./model/type";
 
 export type Step = {
 	title: string;
@@ -15,6 +15,7 @@ export type CephalometricResult = {
 }
 
 export type Measurement = {
+	rotationAngle: number,
 	yAxis: number,
 	fma: number,
 	gonionAngle: number,
@@ -34,11 +35,19 @@ export type Measurement = {
 	palatalPlane: number,
 	dpo: number,
 	angleOfCondylarPathVSOccPlane: number,
+	lipThickThin: number,
+	incompleteLipSeal: number,
+	exposedVermilionBorder: number,
+	hyperactiveMentalisMuscle: number,
+	maxBuffoloHum: number,
+	mandBirdBeak: number,
+	thirdClueMesiallyInclinedOfLat: number,
+	dentureFrame: number
 }
 
 export type TableRow = {
 	title: string,
-	average: string| null,
+	average: string | null,
 	deviation: string | null,
 	change8To16: number,
 	measurement: number | null,
