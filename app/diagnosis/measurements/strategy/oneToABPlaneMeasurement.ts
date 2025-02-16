@@ -17,13 +17,13 @@ export class OneToABPlaneMeasurementStrategy implements MeasurementStrategy {
 				{ x: aPoint.startX, y: aPoint.startY },
 				{ x: bPoint.startX, y: bPoint.startY }
 			);
-			const distance = getDistanceBetweenPoint(
+			const distancePx = getDistanceBetweenPoint(
 				a1Point.startX,
 				a1Point.startY,
 				perpendicularPoint.x,
 				perpendicularPoint.y
 			);
-			return distance;
+			return distancePx / this.controller.getDistanceInPx();
 		}
 		return 0;
 	}

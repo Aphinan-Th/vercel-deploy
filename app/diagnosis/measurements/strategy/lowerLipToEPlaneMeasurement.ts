@@ -17,13 +17,13 @@ export class LowerLipToEPlaneMeasurement implements MeasurementStrategy {
 				{ x: enPoint.startX, y: enPoint.startY },
 				{ x: dtPoint.startX, y: dtPoint.startY }
 			);
-			const distance = getDistanceBetweenPoint(
+			const distancePx = getDistanceBetweenPoint(
 				llPoint.startX,
 				llPoint.startY,
 				perpendicularPoint.x,
 				perpendicularPoint.y
 			);
-			return distance;
+			return distancePx / this.controller.getDistanceInPx() ;
 		}
 		return 0;
 	}

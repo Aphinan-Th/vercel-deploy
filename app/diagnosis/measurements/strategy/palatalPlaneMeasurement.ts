@@ -1,5 +1,5 @@
-import { DrawType, PointName } from "../../model/enum";
-import { findIntersectPointFromExtendLine, getAngleFromPoints } from "../findPointUtils";
+import { PointName } from "../../model/enum";
+import { findIntersectPointFromExtendLine, getDistanceBetweenPoint } from "../findPointUtils";
 import { MeasurementController, MeasurementStrategy } from "../measurement";
 
 export class PalatalPlaneMeasurement implements MeasurementStrategy {
@@ -12,9 +12,10 @@ export class PalatalPlaneMeasurement implements MeasurementStrategy {
         const meToLrLine = this.controller.findDrawingAction(PointName.MeToLr);
         const ansPoint = this.controller.findDrawingAction(PointName.ANS);
         const pnsPoint = this.controller.findDrawingAction(PointName.PNS);
+        const p1Point = this.controller.findDrawingAction(PointName.P1);
         const p2Point = this.controller.findDrawingAction(PointName.P2);
 
-        if (nPoint && poPoint && meToLrLine && ansPoint && pnsPoint && p2Point) {
+        if (nPoint && poPoint && meToLrLine && ansPoint && pnsPoint && p1Point && p2Point) {
             const gnPoint = findIntersectPointFromExtendLine(
                 { x: nPoint.startX, y: nPoint.startY },
                 { x: poPoint.startX, y: poPoint.startY },
@@ -22,23 +23,29 @@ export class PalatalPlaneMeasurement implements MeasurementStrategy {
                 { x: meToLrLine.startX, y: meToLrLine.startY }
             );
 
-            if (gnPoint?.x && gnPoint?.y) {
-                const intersectPoint = findIntersectPointFromExtendLine(
-                    { x: ansPoint.startX, y: ansPoint.startY },
-                    { x: pnsPoint.startX, y: pnsPoint.startY },
-                    { x: gnPoint.x, y: gnPoint.y },
-                    { x: p2Point.startX, y: p2Point.startY }
-                );
+            const goPoint = findIntersectPointFromExtendLine(
+                { x: p1Point.startX, y: p1Point.startY },
+                { x: p2Point.startX, y: p2Point.startY },
+                { x: meToLrLine.startX, y: meToLrLine.startY },
+                { x: meToLrLine.endX ?? 0, y: meToLrLine.endY ?? 0 }
+            )
 
-                if (intersectPoint?.x && intersectPoint?.y) {
-                    const pivotPoint = {
-                        type: DrawType.Dot,
-                        startX: intersectPoint.x,
-                        startY: intersectPoint.y,
-                    };
-                    const angleResult = getAngleFromPoints(pnsPoint, pivotPoint, p2Point);
-                    return angleResult;
-                }
+            if (gnPoint?.x && gnPoint?.y && goPoint?.x && goPoint?.y) {
+                const distancePxOfAnsPns = getDistanceBetweenPoint(
+                    ansPoint.startX,
+                    ansPoint.startY,
+                    pnsPoint.startX,
+                    pnsPoint.startY
+                )
+
+                const distancePxOfGoGn = getDistanceBetweenPoint(
+                    goPoint.x,
+                    goPoint.y,
+                    gnPoint.x,
+                    gnPoint.y
+                )
+
+                return distancePxOfAnsPns / distancePxOfGoGn
             }
         }
         return 0;
