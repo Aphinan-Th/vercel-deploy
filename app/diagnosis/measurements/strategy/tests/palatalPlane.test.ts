@@ -1,7 +1,6 @@
 import { DiagnosisCephalo } from "../../../states/diagnosis";
 import { DrawType, PointName } from "../../../model/enum";
 import { MeasurementController } from "../../measurement";
-import { OneToSNMeasurement } from "../oneToSNMeasurement";
 import { PalatalPlaneMeasurement } from "../palatalPlaneMeasurement";
 
 describe("Palatal Plane", () => {
