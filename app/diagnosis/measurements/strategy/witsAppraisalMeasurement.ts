@@ -27,7 +27,7 @@ export class WitsAppraisalMeasurementStrategy implements MeasurementStrategy {
 
 			const signedValue = aoPoint.x < boPoint.x ? -1 : 1
 			const distance = getDistanceBetweenPoint(aoPoint.x, aoPoint.y, boPoint.x, boPoint.y);
-			return (distance / this.controller.getDistanceInPx()) * signedValue;
+			return (distance / this.controller.getDistanceInPx()) * signedValue * 10;
 		}
 		return 0;
     }

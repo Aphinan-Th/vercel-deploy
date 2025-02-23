@@ -48,7 +48,7 @@ export const skeletalData = (result: Result): TableRow[] => {
 	const pointAToNvert = parseFloat(result["pointAToNvert"]?.toFixed(2))
 	const witsAppraisal = parseFloat(result["witsAppraisal"]?.toFixed(2))
 	return [
-		{ title: "4. Cranial Base Angle", average: "130.0", deviation: "±5.0", change8To16: -0.18, measurement: cranialBaseAngle, interpretation: executeInterpretation(65.0, cranialBaseAngle, 4.6) },
+		{ title: "4. Cranial Base Angle", average: "130.0", deviation: "±5.0", change8To16: -0.18, measurement: cranialBaseAngle, interpretation: executeInterpretation(130.0, cranialBaseAngle, 5) },
 		{ title: "5. SNA", average: "82.0", deviation: "±3.2", change8To16: -0.18, measurement: sna, interpretation: executeInterpretation(82.0, sna, 3.2) },
 		{ title: "6. SNB", average: "80.0", deviation: "±3.0", change8To16: -0.18, measurement: snb, interpretation: executeInterpretation(80.0, snb, 3.0) },
 		{ title: "7. ANB", average: "2.0", deviation: "±2.3", change8To16: -0.18, measurement: anb, interpretation: executeInterpretation(2.0, anb, 2.3) },

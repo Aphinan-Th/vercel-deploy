@@ -45,7 +45,7 @@ export class PalatalPlaneMeasurement implements MeasurementStrategy {
                     gnPoint.y
                 )
 
-                return distancePxOfAnsPns / distancePxOfGoGn
+                return (distancePxOfAnsPns / distancePxOfGoGn)
             }
         }
         return 0;

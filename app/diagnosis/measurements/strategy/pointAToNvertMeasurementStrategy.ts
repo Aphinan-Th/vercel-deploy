@@ -1,6 +1,6 @@
 import { PointName } from "../../model/enum";
 import { Point } from "../../model/type";
-import { getDistanceBetweenPoint } from "../findPointUtils";
+import { getDistancePointToLine } from "../findPointUtils";
 import { MeasurementController, MeasurementStrategy } from "../measurement";
 
 export class PointAToNvertMeasurementStrategy implements MeasurementStrategy {
@@ -13,16 +13,23 @@ export class PointAToNvertMeasurementStrategy implements MeasurementStrategy {
         const prPoint = this.controller.findDrawingAction(PointName.Pr);
         const orPoint = this.controller.findDrawingAction(PointName.Or);
         if (aPoint && nPoint && prPoint && orPoint) {
-            const noPoint: Point = {x: nPoint.startX, y: prPoint.startY};
-            const aoPoint: Point = {x: aPoint.startX, y: prPoint.startY};
-            const signedValue = aoPoint.x < noPoint.x ? -1 : 1
-            const distance = getDistanceBetweenPoint(
-                aoPoint.x,
-                aoPoint.y,
-                noPoint.x,
-                noPoint.y
+            const npoPoint: Point = { x: nPoint.startX, y: prPoint.startY };
+            const signedValue = aPoint.startX < npoPoint.x ? -1 : 1
+            const distance = getDistancePointToLine(
+                {
+                    x: aPoint.startX,
+                    y: aPoint.startY,
+                },
+                {
+                    x: npoPoint.x,
+                    y: npoPoint.y,
+                },
+                {
+                    x: npoPoint.x,
+                    y: aPoint.startY,
+                }
             );
-            return (distance / this.controller.getDistanceInPx()) * signedValue;
+            return (distance / this.controller.getDistanceInPx()) * signedValue * 10;
         }
         return 0;
     }

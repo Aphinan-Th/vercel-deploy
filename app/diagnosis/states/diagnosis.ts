@@ -26,9 +26,8 @@ import { LLPointState } from "./llPointState";
 import { DtPointState } from "./dtPointState";
 import { DPointState } from "./dPointState";
 import { POCLineState } from "./pocPointState";
-import { DrawType, PointName } from "@/app/diagnosis/model/enum";
 import EventEmitter from "events";
-import { DrawDetail, Point, Result } from "@/app/diagnosis/model/type";
+import { DrawDetail, Point, Result } from "../../diagnosis/model/type";
 import { CranialBaseAngleMeasurement } from "../measurements/strategy/cranialBaseAngleMeasurement";
 import { MeasurementController } from "../measurements/measurement";
 import { YAxisMeasurementStrategy as YAxisMeasurement } from "../measurements/strategy/yAxisMeasurementStrategy";
@@ -48,6 +47,7 @@ import { SNAMeasurement } from "../measurements/strategy/snaMeasurement";
 import { SNBMeasurement } from "../measurements/strategy/snbMeasurement";
 import { LowerLipToEPlaneMeasurement } from "../measurements/strategy/lowerLipToEPlaneMeasurement";
 import { CompletedState } from "./completedState";
+import { DrawType, PointName } from "../model/enum";
 
 export class DiagnosisCephalo {
     private actionDrawings: DrawDetail[] = []

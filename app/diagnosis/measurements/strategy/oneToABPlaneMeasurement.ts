@@ -23,7 +23,7 @@ export class OneToABPlaneMeasurementStrategy implements MeasurementStrategy {
 				perpendicularPoint.x,
 				perpendicularPoint.y
 			);
-			return distancePx / this.controller.getDistanceInPx();
+			return (distancePx / this.controller.getDistanceInPx()) * 10;
 		}
 		return 0;
 	}

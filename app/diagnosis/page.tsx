@@ -256,7 +256,7 @@ export default function Diagnosis() {
 
 	const generateJsonFile = (): string => {
 		const jsonResult = {
-			drawingActions: JSON.parse(localStorage.getItem("drawingActions") || ""),
+			drawingActions: diagnosisCephalo.current.getActionsDrawings(),
 			measurement: generateMeasurement(),
 		};
 		return JSON.stringify(jsonResult, null, 2);

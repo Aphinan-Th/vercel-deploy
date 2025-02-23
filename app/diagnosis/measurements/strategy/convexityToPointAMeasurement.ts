@@ -24,7 +24,7 @@ export class ConvexityToPointAMeasurementStrategy implements MeasurementStrategy
 				perpendicularPoint.x,
 				perpendicularPoint.y
 			);
-			return (distance / this.controller.getDistanceInPx()) * signedValue;
+			return (distance / this.controller.getDistanceInPx()) * signedValue * 10;
 		}
 		return 0;
 	}

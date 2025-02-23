@@ -23,7 +23,7 @@ export class DpoMeasurement implements MeasurementStrategy {
 				perpendicularPoint.x,
 				perpendicularPoint.y
 			);
-			return distance / this.controller.getDistanceInPx();
+			return distance / this.controller.getDistanceInPx() * 10;
 		}
 		return 0;
 	}
