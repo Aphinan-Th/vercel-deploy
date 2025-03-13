@@ -35,7 +35,7 @@ export class AngleOfCondylarPath implements MeasurementStrategy {
                     startX: intersectPoint.x,
                     startY: intersectPoint.y,
                 };
-                const angleResult = getAngleFromPoints(poCPlane, pivotPoint, mpPoint);
+                const angleResult = 180 - getAngleFromPoints(poCPlane, pivotPoint, a1Point);
                 return angleResult;
             }
         }

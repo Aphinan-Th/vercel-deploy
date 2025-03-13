@@ -19,29 +19,29 @@ describe('Angle of Condylar Path VS OCC Plane', () => {
         diagnosis.addActionsDrawings(
             {
                 pointName: PointName.PoC,
-                startX: 271,
-                startY: 249,
-                endX: 240,
-                endY: 236,
+                startX: 243,
+                startY: 240,
+                endX: 257,
+                endY: 260,
                 type: DrawType.Line
             }
         )
         diagnosis.addActionsDrawings({
             pointName: PointName.A1,
-            startX: 451,
-            startY: 395,
+            startX: 448,
+            startY: 401,
             type: DrawType.Dot
         })
         diagnosis.addActionsDrawings({
             pointName: PointName.Mp,
-            startX: 365,
-            startY: 374,
+            startX: 361,
+            startY: 378,
             type: DrawType.Dot
         })
         const strategy = new AngleOfCondylarPath(diagnosis.getMeasurementController())
 
         const result = strategy.execute()
 
-        expect(result).toBe(9.028679209654044)
+        expect(result).toBe(40.19960276239894)
     });
 })

@@ -146,12 +146,6 @@ export function findIntersectPointFromExtendLine(
         );
 
         if (intersection?.x != null && intersection?.y != null) {
-            // const newPivot = {
-            //     type: DrawType.Dot,
-            //     startX: intersection?.x,
-            //     startY: intersection?.y,
-            // };
-            // drawRectangle(canvasContext, newPivot, "");
             return intersection;
         }
     }
