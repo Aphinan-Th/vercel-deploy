@@ -6,6 +6,11 @@ import { PointName, DrawType } from "../model/enum";
 export class MpPointState extends CephaloState {
 
     executeLine(): void {
+        const point = this.diagnosis.findDrawingAction(PointName.Mp)
+        if (point) {
+            this.diagnosis.drawText(PointName.Mp, { x: point.startX, y: point.startY })
+            this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
+        }
         return
     }
 
@@ -19,6 +24,7 @@ export class MpPointState extends CephaloState {
             }
         )
         // TODO drawline
+        this.diagnosis.drawText(PointName.Mp, point)
         this.diagnosis.setState(CephaloPointStep.SetpMpPoint)
     }
 

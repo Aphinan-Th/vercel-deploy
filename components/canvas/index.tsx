@@ -37,7 +37,7 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 		context.strokeStyle = "red";
 		context.lineCap = "round";
 		context.lineJoin = "round";
-		context.lineWidth = 1;
+		context.lineWidth = 0.5;
 	};
 
 	const redrawImage = (rotationAngle: number) => {
@@ -58,7 +58,6 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 				canvasContext.restore();
 			}
 		}
-
 	}
 
 	const initializeCanvas = (context2D: CanvasRenderingContext2D, imageFile: File) => {

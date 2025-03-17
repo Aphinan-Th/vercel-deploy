@@ -6,6 +6,11 @@ import { PointName, DrawType } from "../model/enum";
 export class LLPointState extends CephaloState {
 
     executeLine(): void {
+        const point = this.diagnosis.findDrawingAction(PointName.LL)
+        if (point) {
+            this.diagnosis.drawText(PointName.LL, { x: point.startX, y: point.startY })
+            this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
+        }
         return
     }
 
@@ -18,7 +23,7 @@ export class LLPointState extends CephaloState {
                 startY: point.y,
             }
         )
-
+        this.diagnosis.drawText(PointName.LL, point)
         this.diagnosis.setState(CephaloPointStep.SetDtPoint)
     }
 

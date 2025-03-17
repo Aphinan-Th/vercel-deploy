@@ -6,7 +6,7 @@ import { PointName, DrawType } from "../model/enum";
 export class OrPointState extends CephaloState {
 
     executeLine(): void {
-        return this.diagnosis.drawFrankfortPlane(0)
+        this.diagnosis.drawFrankfortPlane(0)
     }
 
     click(point: Point): void {

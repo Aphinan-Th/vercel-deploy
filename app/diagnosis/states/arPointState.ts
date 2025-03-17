@@ -6,6 +6,11 @@ import { PointName, DrawType } from "../model/enum";
 export class ARPointState extends CephaloState {
 
     executeLine(): void {
+        const arPoint = this.diagnosis.findDrawingAction(PointName.Ar)
+        if (arPoint) {
+            this.diagnosis.drawText(PointName.Ar, { x: arPoint.startX, y: arPoint.startY })
+            this.diagnosis.drawPoint({ x: arPoint.startX, y: arPoint.startY })
+        }
         return
     }
 
@@ -19,6 +24,7 @@ export class ARPointState extends CephaloState {
             }
         )
         // TODO drawline a1/ar
+        this.diagnosis.drawText(PointName.Ar, point)
         this.diagnosis.setState(CephaloPointStep.SetB1Point)
     }
 

@@ -9,6 +9,8 @@ export class BPointState extends CephaloState {
         const nPoint = this.diagnosis.findDrawingAction(PointName.N)
         const bPoint = this.diagnosis.findDrawingAction(PointName.B)
         if (nPoint && bPoint) {
+            this.diagnosis.drawText(PointName.B, { x: bPoint.startX, y: bPoint.startY })
+            this.diagnosis.drawPoint({ x: bPoint.startX, y: bPoint.startY })
             this.diagnosis.drawLine({ x: nPoint.startX, y: nPoint.startY }, { x: bPoint.startX, y: bPoint.startY })
         }
     }

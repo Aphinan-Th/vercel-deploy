@@ -18,6 +18,7 @@ export class PrPointState extends CephaloState {
                 startY: point.y,
             }
         )
+        this.diagnosis.drawText(PointName.Pr, point)
         this.diagnosis.setState(CephaloPointStep.SetOrPoint)
     }
 

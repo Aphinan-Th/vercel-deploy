@@ -6,7 +6,11 @@ import { PointName, DrawType } from "../model/enum";
 export class SPointState extends CephaloState {
 
     executeLine(): void {
-        return
+        const sPoint = this.diagnosis.findDrawingAction(PointName.S)
+        if (sPoint) {
+            this.diagnosis.drawPoint({ x: sPoint.startX, y: sPoint.startY })
+            this.diagnosis.drawText(PointName.S, { x: sPoint.startX, y: sPoint.startY })
+        }
     }
 
     click(point: Point): void {
@@ -18,6 +22,7 @@ export class SPointState extends CephaloState {
                 startY: point.y,
             }
         )
+        this.diagnosis.drawText(PointName.S, point)
         this.diagnosis.setState(CephaloPointStep.SetNPoint)
     }
 

@@ -77,7 +77,7 @@ export default function Diagnosis() {
 		});
 
 		return () => {
-			cephaloInstance.onChangeState(() => {});
+			cephaloInstance.onChangeState(() => { });
 		};
 	}, []);
 
@@ -88,7 +88,7 @@ export default function Diagnosis() {
 		});
 
 		return () => {
-			cephaloInstance.onCompletedAllState(() => {});
+			cephaloInstance.onCompletedAllState(() => { });
 		};
 	}, []);
 
@@ -327,9 +327,8 @@ export default function Diagnosis() {
 			<Navbar onClick={() => hiddenToggle()} value={isHidden} />
 			<div className={`px-10 min-h-screen items-center justify-center ${isHidden ? "py-24" : "py-16"}`}>
 				<div
-					className={`border-b border-gray-200 dark:border-gray-700 mb-4 flex justify-between align-middle items-center ${
-						isHidden ? "hidden" : "flex"
-					}`}
+					className={`border-b border-gray-200 dark:border-gray-700 mb-4 flex justify-between align-middle items-center ${isHidden ? "hidden" : "flex"
+						}`}
 				>
 					<ul className="flex flex-wrap -mb-px text-sm font-medium text-center">
 						{[Tab.Diagnosis, Tab.Drawing].map((tab, idx) => (

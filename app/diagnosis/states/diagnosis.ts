@@ -108,7 +108,7 @@ export class DiagnosisCephalo {
 
     click(point: Point) {
         if (this.state == CephaloPointState.SetCompleted) return
-        this.drawPoint(this.getStateContent().pointName, point)
+        this.drawPoint(point)
         this.allStates[this.state].click(point)
     }
 
@@ -190,23 +190,29 @@ export class DiagnosisCephalo {
         return this.context
     }
 
-    drawPoint(pointName: string = "", point: Point) {
+    drawPoint(point: Point) {
         if (this.context == null) return
         this.context.beginPath();
-        this.context.arc(point.x, point.y, 2, 0, 2 * Math.PI);
+        this.context.arc(point.x, point.y, 1, 0, 2 * Math.PI);
         this.context.fill();
         this.context.stroke();
-        this.drawText(pointName, point)
     }
 
     drawLine(point1: Point, point2: Point) {
         if (this.context == null) return
         if (point2.x != 0 && point2.y != 0) {
             this.context.beginPath();
+            this.context.lineWidth = 0.5
             this.context.moveTo(point1.x, point1.y);
             this.context.lineTo(point2.x, point2.y);
             this.context.stroke();
         }
+    }
+
+    setColor(color: string) {
+        if (this.context == null) return
+        this.context.fillStyle = color
+        this.context.strokeStyle = color
     }
 
     drawText(pointName: string, point: Point) {
@@ -223,27 +229,13 @@ export class DiagnosisCephalo {
         for (const key in this.allStates) {
             this.allStates[key].executeLine()
         }
-        this.actionDrawings.forEach((action) => {
-            if (action.type == DrawType.Dot) {
-                this.drawPoint(action.pointName?.toString() ?? "", { x: action.startX, y: action.startY })
-            } else {
-                this.drawPoint("", { x: action.startX, y: action.startY })
-                this.drawPoint(action.pointName?.toString() ?? "", { x: action.endX ?? 0, y: action.endY ?? 0 })
-            }
-        })
     }
 
     reRenderFromTab(newContext: CanvasRenderingContext2D) {
         this.context = newContext
-        this.actionDrawings.forEach((action) => {
-            if (action.type == DrawType.Dot) {
-                this.drawPoint(action.pointName?.toString() ?? "", { x: action.startX, y: action.startY })
-            } else {
-                this.drawPoint("", { x: action.startX, y: action.startY })
-                this.drawPoint(action.pointName?.toString() ?? "", { x: action.endX ?? 0, y: action.endY ?? 0 })
-                this.drawLine({ x: action.startX, y: action.startY }, { x: action.endX ?? 0, y: action.endY ?? 0 })
-            }
-        })
+        for (const key in this.allStates) {
+            this.allStates[key].executeLine()
+        }
     }
 
     setReDrawImage(callback: (rotationAngle: number) => void) {
@@ -267,8 +259,8 @@ export class DiagnosisCephalo {
             const newActionDrawings: DrawDetail[] = []
             this.actionDrawings.forEach((action) => {
                 if (action.type == DrawType.Dot) {
-                    const newPoint = this.rotatePoint({ x: action.startX, y: action.startY }, { x: prPoint.startX, y: prPoint.startY }, rotationAngle)
-                    this.drawPoint(action.pointName?.toString() ?? "", { x: newPoint.x, y: newPoint.y })
+                    const newPoint = this.rotatePoint({ x: action.startX, y: action.startY }, { x: this.getCenterFrame(), y: this.getCenterFrame() }, rotationAngle)
+                    this.drawPoint({ x: newPoint.x, y: newPoint.y })
 
                     const newAction: DrawDetail = {
                         type: action.type,
@@ -278,11 +270,11 @@ export class DiagnosisCephalo {
                     }
                     newActionDrawings.push(newAction)
                 } else {
-                    const newPoint = this.rotatePoint({ x: action.startX, y: action.startY }, { x: prPoint.startX, y: prPoint.startY }, rotationAngle)
-                    this.drawPoint(action.pointName?.toString() ?? "", { x: newPoint.x, y: newPoint.y })
+                    const newPoint = this.rotatePoint({ x: action.startX, y: action.startY }, { x: this.getCenterFrame(), y: this.getCenterFrame() }, rotationAngle)
+                    this.drawPoint({ x: newPoint.x, y: newPoint.y })
 
-                    const newPoint2 = this.rotatePoint({ x: action.endX ?? 0, y: action.endY ?? 0 }, { x: prPoint.startX, y: prPoint.startY }, rotationAngle)
-                    this.drawPoint(action.pointName?.toString() ?? "", { x: newPoint2.x, y: newPoint2.y })
+                    const newPoint2 = this.rotatePoint({ x: action.endX ?? 0, y: action.endY ?? 0 }, { x: this.getCenterFrame(), y: this.getCenterFrame() }, rotationAngle)
+                    this.drawPoint({ x: newPoint2.x, y: newPoint2.y })
 
                     this.drawLine({ x: newPoint.x, y: newPoint.y }, { x: newPoint2.x ?? 0, y: newPoint2.y ?? 0 })
 
@@ -306,10 +298,15 @@ export class DiagnosisCephalo {
         const prPoint = this.findDrawingAction(PointName.Pr)
         const orPoint = this.findDrawingAction(PointName.Or)
         if (prPoint && orPoint) {
-            const newPoint = this.rotatePoint({ x: prPoint.startX, y: prPoint.startY }, { x: prPoint.startX, y: prPoint.startY }, rotationAngle)
-            const newPoint2 = this.rotatePoint({ x: orPoint.startX, y: orPoint.startY }, { x: prPoint.startX, y: prPoint.startY }, rotationAngle)
-
-            this.drawLine({ x: 0, y: newPoint.y }, { x: 600, y: newPoint2.y })
+            const newPointPr = this.rotatePoint({ x: prPoint.startX, y: prPoint.startY }, { x: this.getCenterFrame(), y: this.getCenterFrame() }, rotationAngle)
+            const newPointOr = this.rotatePoint({ x: orPoint.startX, y: orPoint.startY }, { x: this.getCenterFrame(), y: this.getCenterFrame() }, rotationAngle)
+            if (newPointPr && newPointOr) {
+                this.drawPoint({ x: newPointPr.x, y: newPointPr.y })
+                this.drawPoint({ x: newPointOr.x, y: newPointOr.y })
+                this.drawText(PointName.Pr, { x: newPointPr.x, y: newPointPr.y })
+                this.drawText(PointName.Or, { x: newPointOr.x, y: newPointOr.y })
+            }
+            this.drawLine({ x: 0, y: newPointPr.y }, { x: 600, y: newPointOr.y })
         }
     }
 
@@ -389,5 +386,10 @@ export class DiagnosisCephalo {
         newResults.angleOfCondylarPathVSOccPlane = this.measurementController.execute();
 
         return newResults
+    }
+
+    private getCenterFrame() {
+        const frameSize = this.context?.canvas.width ?? 0
+        return frameSize / 2
     }
 }

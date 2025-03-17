@@ -14,6 +14,7 @@ export class A1PointState extends CephaloState {
                 startY: point.y,
             }
         )
+        this.diagnosis.drawText(PointName.A1, point)
         this.diagnosis.setState(CephaloPointStep.SetArPoint)
     }
 
@@ -32,6 +33,11 @@ export class A1PointState extends CephaloState {
     }
 
     executeLine(): void {
+        const a1Point = this.diagnosis.findDrawingAction(PointName.A1)
+        if (a1Point) {
+            this.diagnosis.drawText(PointName.A1, { x: a1Point.startX, y: a1Point.startY })
+            this.diagnosis.drawPoint({ x: a1Point.startX, y: a1Point.startY })
+        }
         return
     }
 }

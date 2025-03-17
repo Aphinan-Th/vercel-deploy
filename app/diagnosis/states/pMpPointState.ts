@@ -9,6 +9,8 @@ export class PMpPointState extends CephaloState {
         const mpPoint = this.diagnosis.findDrawingAction(PointName.Mp)
         const pMpPoint = this.diagnosis.findDrawingAction(PointName.pMp)
         if (mpPoint && pMpPoint) {
+            this.diagnosis.drawText(PointName.pMp, { x: pMpPoint.startX, y: pMpPoint.startY })
+            this.diagnosis.drawPoint({ x: pMpPoint.startX, y: pMpPoint.startY })
             this.diagnosis.drawLine({ x: mpPoint.startX, y: mpPoint.startY }, { x: pMpPoint.startX, y: pMpPoint.startY })
         }
     }

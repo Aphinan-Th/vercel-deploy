@@ -6,6 +6,10 @@ import { PointName, DrawType } from "../model/enum";
 export class P1PointState extends CephaloState {
 
     executeLine(): void {
+        const point = this.diagnosis.findDrawingAction(PointName.P1)
+        if (point) {
+            this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
+        }
         return
     }
 

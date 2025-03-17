@@ -8,6 +8,9 @@ export class DistanceState extends CephaloState {
     executeLine(): void {
         const point = this.diagnosis.findDrawingAction(PointName.Distance)
         if (point) {
+            this.diagnosis.drawText(PointName.Distance, { x: point.startX, y: point.startY })
+            this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
+            this.diagnosis.drawPoint({ x: point.endX ?? 0, y: point.endY ?? 0 })
             this.diagnosis.drawLine({ x: point.startX, y: point.startY }, { x: point.endX ?? 0, y: point.endY ?? 0 })
         }
     }

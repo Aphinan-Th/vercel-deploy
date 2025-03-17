@@ -2,14 +2,17 @@ import { CephaloState, StateDescriptionModel } from "./cephaloState";
 import { CephaloPointStep } from "../cephaloStep";
 import { Point } from "../model/type";
 import { PointName, DrawType } from "../model/enum";
+import { findIntersectPointFromExtendLine } from "../measurements/findPointUtils";
 
 export class P2PointState extends CephaloState {
 
     executeLine(): void {
-        const p1point = this.diagnosis.findDrawingAction(PointName.P1)
-        const p2point = this.diagnosis.findDrawingAction(PointName.P2)
-        if (p1point && p2point) {
-            this.diagnosis.drawLine({ x: p1point.startX, y: p1point.startY }, { x: p2point.startX, y: p2point.startY })
+        const p1Point = this.diagnosis.findDrawingAction(PointName.P1)
+        const p2Point = this.diagnosis.findDrawingAction(PointName.P2)
+        if (p1Point && p2Point) {
+            this.diagnosis.drawPoint({ x: p2Point.startX, y: p2Point.startY })
+            this.diagnosis.drawLine({ x: p1Point.startX, y: p1Point.startY }, { x: p2Point.startX, y: p2Point.startY })
+            this.drawGoPoint()
         }
     }
 
@@ -38,5 +41,33 @@ export class P2PointState extends CephaloState {
             description: "Set point of P2",
             imagePath: "/assets/images/sample/P2.webp"
         };
+    }
+
+    private drawGoPoint() {
+        const p1Point = this.diagnosis.findDrawingAction(PointName.P1)
+        const p2Point = this.diagnosis.findDrawingAction(PointName.P2)
+        const meToLrLinePoint = this.diagnosis.findDrawingAction(PointName.MeToLr)
+        if (p1Point && p2Point && meToLrLinePoint) {
+            const intersectPoint = findIntersectPointFromExtendLine(
+                { x: p1Point.startX, y: p1Point.startY },
+                { x: p2Point.startX, y: p2Point.startY },
+                { x: meToLrLinePoint.startX, y: meToLrLinePoint.startY },
+                { x: meToLrLinePoint.endX ?? 0, y: meToLrLinePoint.endY ?? 0 }
+            );
+
+            if (intersectPoint?.x && intersectPoint?.y) {
+                this.diagnosis.setColor("yellow")
+                this.diagnosis.drawLine({ x: p1Point.startX, y: p1Point.startY }, intersectPoint)
+                this.diagnosis.drawLine({ x: meToLrLinePoint.startX, y: meToLrLinePoint.startY }, intersectPoint)
+                this.diagnosis.drawPoint(intersectPoint)
+                this.diagnosis.drawPoint({ x: p1Point.startX, y: p1Point.startY })
+                this.diagnosis.drawPoint({ x: p2Point.startX, y: p2Point.startY })
+                this.diagnosis.drawPoint({ x: meToLrLinePoint.startX, y: meToLrLinePoint.startY })
+                this.diagnosis.drawPoint({ x: meToLrLinePoint.endX ?? 0, y: meToLrLinePoint.endY ?? 0 })
+                this.diagnosis.drawText("Go", intersectPoint)
+                this.diagnosis.drawText("Lr", { x: meToLrLinePoint.endX ?? 0, y: meToLrLinePoint.endY ?? 0 })
+                this.diagnosis.setColor("red")
+            }
+        }
     }
 }

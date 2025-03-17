@@ -1,5 +1,5 @@
 import { DrawType, PointName } from "../../model/enum";
-import { Point } from "../../model/type";
+import { DrawDetail, Point } from "../../model/type";
 import { findIntersectPointFromExtendLine, getAngleFromPoints } from "../findPointUtils";
 import { MeasurementController, MeasurementStrategy } from "../measurement";
 
@@ -35,8 +35,18 @@ export class AngleOfCondylarPath implements MeasurementStrategy {
                     startX: intersectPoint.x,
                     startY: intersectPoint.y,
                 };
-                const angleResult = 180 - getAngleFromPoints(poCPlane, pivotPoint, a1Point);
-                return angleResult;
+                const newPoCPlane: DrawDetail = {
+                    type: DrawType.Line,
+                    startX: newPoCPlaneStart.x,
+                    startY: newPoCPlaneStart.y,
+                    endX: newPoCPlaneEnd.x,
+                    endY: newPoCPlaneEnd.y,
+                }
+                if (pivotPoint.startX > a1Point.startX) {
+                    return getAngleFromPoints(newPoCPlane, pivotPoint, mpPoint);
+                } else {
+                    return 180 - getAngleFromPoints(newPoCPlane, pivotPoint, a1Point);
+                }
             }
         }
         return 0;

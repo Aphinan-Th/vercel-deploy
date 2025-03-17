@@ -6,6 +6,11 @@ import { Point } from "../model/type";
 export class B1PointState extends CephaloState {
 
     executeLine(): void {
+        const b1Point = this.diagnosis.findDrawingAction(PointName.B1)
+        if (b1Point) {
+            this.diagnosis.drawText(PointName.B1, { x: b1Point.startX, y: b1Point.startY })
+            this.diagnosis.drawPoint({ x: b1Point.startX, y: b1Point.startY })
+        }
         return
     }
 
@@ -18,6 +23,7 @@ export class B1PointState extends CephaloState {
                 startY: point.y,
             }
         )
+        this.diagnosis.drawText(PointName.B1, point)
         this.diagnosis.setState(CephaloPointStep.SetBrPoint)
     }
 

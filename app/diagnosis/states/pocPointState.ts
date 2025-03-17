@@ -9,6 +9,8 @@ export class POCLineState extends CephaloState {
         const point = this.diagnosis.findDrawingAction(PointName.PoC)
         if (point) {
             this.diagnosis.drawLine({ x: point.startX, y: point.startY }, { x: point.endX ?? 0, y: point.endY ?? 0 })
+            this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
+            this.diagnosis.drawPoint({ x: point.endX ?? 0, y: point.endY ?? 0 })
         }
     }
 
