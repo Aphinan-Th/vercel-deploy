@@ -40,4 +40,12 @@ export class PNSPointState extends CephaloState {
             imagePath: "/assets/images/sample/PNS.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.PNS);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetANSPoint)
+        }
+        return !isValid;
+    }
 }

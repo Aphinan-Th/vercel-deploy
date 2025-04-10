@@ -35,4 +35,12 @@ export class PrPointState extends CephaloState {
             imagePath: "/assets/images/sample/Pr.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Pr);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetOrPoint)
+        }
+        return !isValid;
+    }
 }

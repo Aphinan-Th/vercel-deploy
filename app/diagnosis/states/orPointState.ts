@@ -57,4 +57,12 @@ export class OrPointState extends CephaloState {
 
         return { newP1, newP2, rotationAngle };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Or);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetSPoint)
+        }
+        return !isValid;
+    }
 }

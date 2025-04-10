@@ -39,4 +39,12 @@ export class SPointState extends CephaloState {
             imagePath: "/assets/images/sample/S.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.S);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetNPoint)
+        }
+        return !isValid;
+    }
 }

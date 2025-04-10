@@ -8,9 +8,11 @@ export class PMpPointState extends CephaloState {
     executeLine(): void {
         const mpPoint = this.diagnosis.findDrawingAction(PointName.Mp)
         const pMpPoint = this.diagnosis.findDrawingAction(PointName.pMp)
-        if (mpPoint && pMpPoint) {
+        if (pMpPoint) {
             this.diagnosis.drawText(PointName.pMp, { x: pMpPoint.startX, y: pMpPoint.startY })
             this.diagnosis.drawPoint({ x: pMpPoint.startX, y: pMpPoint.startY })
+        }
+        if (mpPoint && pMpPoint) {
             this.diagnosis.drawLine({ x: mpPoint.startX, y: mpPoint.startY }, { x: pMpPoint.startX, y: pMpPoint.startY })
         }
     }
@@ -40,5 +42,13 @@ export class PMpPointState extends CephaloState {
             description: "Set point of pMp",
             imagePath: "/assets/images/sample/pMp.webp"
         };
+    }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.pMp);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetBPoint)
+        }
+        return !isValid;
     }
 }

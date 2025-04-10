@@ -9,8 +9,10 @@ export class P2PointState extends CephaloState {
     executeLine(): void {
         const p1Point = this.diagnosis.findDrawingAction(PointName.P1)
         const p2Point = this.diagnosis.findDrawingAction(PointName.P2)
-        if (p1Point && p2Point) {
+        if (p2Point) {
             this.diagnosis.drawPoint({ x: p2Point.startX, y: p2Point.startY })
+        }
+        if (p1Point && p2Point) {
             this.diagnosis.drawLine({ x: p1Point.startX, y: p1Point.startY }, { x: p2Point.startX, y: p2Point.startY })
             this.drawGoPoint()
         }
@@ -69,5 +71,13 @@ export class P2PointState extends CephaloState {
                 this.diagnosis.setColor("red")
             }
         }
+    }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.P2);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetBaPoint)
+        }
+        return !isValid;
     }
 }

@@ -8,9 +8,11 @@ export class DPointState extends CephaloState {
     executeLine(): void {
         const dtPoint = this.diagnosis.findDrawingAction(PointName.Dt)
         const dPoint = this.diagnosis.findDrawingAction(PointName.D)
-        if (dtPoint && dPoint) {
+        if (dPoint) {
             this.diagnosis.drawText(PointName.D, { x: dPoint.startX, y: dPoint.startY })
             this.diagnosis.drawPoint({ x: dPoint.startX, y: dPoint.startY })
+        }
+        if (dtPoint && dPoint) {
             this.diagnosis.drawLine({ x: dtPoint.startX, y: dtPoint.startY }, { x: dPoint.startX, y: dPoint.startY })
         }
     }
@@ -40,5 +42,13 @@ export class DPointState extends CephaloState {
             description: "Set point of D",
             imagePath: "/assets/images/sample/D.webp"
         };
+    }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.D);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetPoCLine)
+        }
+        return !isValid;
     }
 }

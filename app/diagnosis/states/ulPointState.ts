@@ -39,4 +39,12 @@ export class ULPointState extends CephaloState {
             imagePath: "/assets/images/sample/UL.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.UL);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetLLPoint)
+        }
+        return !isValid;
+    }
 }

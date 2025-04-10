@@ -79,4 +79,12 @@ export class MeToLrLineState extends CephaloState {
             }
         }
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.MeToLr);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetP1Point)
+        }
+        return !isValid;
+    }
 }

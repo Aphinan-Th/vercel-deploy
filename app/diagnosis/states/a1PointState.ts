@@ -32,6 +32,14 @@ export class A1PointState extends CephaloState {
         };
     }
 
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.A1);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetArPoint)
+        }
+        return !isValid;
+    }
+
     executeLine(): void {
         const a1Point = this.diagnosis.findDrawingAction(PointName.A1)
         if (a1Point) {

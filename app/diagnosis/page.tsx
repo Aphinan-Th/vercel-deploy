@@ -1,7 +1,6 @@
 "use client";
 
 import ImageSelector from "@/components/imageSelector";
-import Stepper from "@/components/stepper";
 import React, { useEffect, useRef, useState } from "react";
 import {
 	measurementHeaders,
@@ -17,7 +16,6 @@ import {
 	dentureFrameHeaders,
 	dentureFrameData,
 } from "./masterData";
-import { steps } from "./steps";
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
 import Link from "next/link";
@@ -37,16 +35,19 @@ import {
 	Printer,
 	EyeOff,
 	Eye,
+	Pencil,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Interpretation, Measurement, Step, TableRow } from "./type";
+import { Interpretation, Measurement, TableRow } from "./type";
 import { titleMapping } from "../comparison-measurement/masterData";
 import Canvas from "@/components/canvas";
 import { DiagnosisCephalo } from "./states/diagnosis";
-import { CanvasRef, Result } from "@/app/diagnosis/model/type";
+import { CanvasRef, DrawDetail, Result } from "@/app/diagnosis/model/type";
 import { StateDescriptionModel } from "./states/cephaloState";
 import SampleImages from "@/components/sampleImages";
 import { CephaloPointStep } from "./cephaloStep";
+import DialogListContent from "@/components/dialog";
+import { CANVAS_CONFIG } from "../base-const";
 
 enum Tab {
 	Diagnosis = "Diagnosis",
@@ -57,7 +58,6 @@ export default function Diagnosis() {
 	const canvasRef = useRef<CanvasRef | null>(null);
 	const diagnosisCephalo = useRef(new DiagnosisCephalo());
 	const [activeTab, setActiveTab] = useState(Tab.Diagnosis);
-	const [currentStep, setCurrentStep] = useState<number>(0);
 	const [isDrawingMode, setIsDrawingMode] = useState(false);
 	const [result, setResult] = useState<Result>({});
 	const [isVisibleCanvas, setIsVisibleCanvas] = useState(true);
@@ -68,11 +68,12 @@ export default function Diagnosis() {
 	const { editor: drawingEditor, onReady: onDrawingReady } = useFabricJSEditor();
 	const [rotationAngle, setRotationAngle] = useState<number>(0);
 	const [isHidden, setIsHidden] = useState<boolean>(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isCompleted, setIsCompleted] = useState(false);
 
 	useEffect(() => {
 		const cephaloInstance = diagnosisCephalo.current;
-		cephaloInstance.onChangeState((index) => {
-			setCurrentStep(index);
+		cephaloInstance.onChangeState(() => {
 			setStepContent(cephaloInstance.getStateContent());
 		});
 
@@ -84,6 +85,7 @@ export default function Diagnosis() {
 	useEffect(() => {
 		const cephaloInstance = diagnosisCephalo.current;
 		cephaloInstance.onCompletedAllState((result) => {
+			setIsCompleted(true)
 			setResult(result);
 		});
 
@@ -116,8 +118,8 @@ export default function Diagnosis() {
 
 			FabricImage.fromURL(url, { crossOrigin: "anonymous" })
 				.then((img: fabric.Image) => {
-					const FIXED_WIDTH = 600;
-					const FIXED_HEIGHT = 600;
+					const FIXED_WIDTH = CANVAS_CONFIG.size;
+					const FIXED_HEIGHT = CANVAS_CONFIG.size;
 					const scaleX = FIXED_WIDTH / img.width;
 					const scaleY = FIXED_HEIGHT / img.height;
 					const scale = Math.min(scaleX, scaleY);
@@ -170,9 +172,13 @@ export default function Diagnosis() {
 		drawingEditor?.deleteSelected();
 	};
 
+	const openModalEditPoint = () => {
+		setIsModalOpen(true);
+	}
+
 	const clearAll = () => {
-		setCurrentStep(0);
 		setSelectedImage(null);
+		setIsCompleted(false);
 		setResult({});
 		clearCanvasDrawing();
 	};
@@ -185,6 +191,12 @@ export default function Diagnosis() {
 	const undoStep = () => {
 		diagnosisCephalo.current.undo();
 	};
+
+	const onClickEditPoint = (detail: DrawDetail) => {
+		setIsModalOpen(false);
+		setIsCompleted(false)
+		diagnosisCephalo.current.setEditPoint(detail);
+	}
 
 	const handleFileSelect = (file: File) => {
 		setSelectedImage(file);
@@ -346,6 +358,7 @@ export default function Diagnosis() {
 					</ul>
 					{activeTab === Tab.Diagnosis ? (
 						<DiagnosisButtons
+							openModalEditPoint={openModalEditPoint}
 							clearAll={clearAll}
 							clearCanvasDrawing={clearCanvasDrawing}
 							undo={undoStep}
@@ -362,14 +375,10 @@ export default function Diagnosis() {
 					)}
 				</div>
 				<div className={`flex items-start h-screen bg-white gap-5 ${isHidden ? "justify-center" : ""}`}>
-					<div className={`${isHidden ? "hidden" : "none"}`}>
-						<Stepper steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
-					</div>
 					<div style={{ display: isVisibleCanvas ? "contents" : "none" }}>
 						<DiagnosisTab
 							selectedImage={selectedImage}
-							steps={steps}
-							currentStep={currentStep}
+							isCompleted={isCompleted}
 							stepContent={stepContent}
 							setResult={setResult}
 							canvasRef={canvasRef}
@@ -389,6 +398,12 @@ export default function Diagnosis() {
 					)}
 				</div>
 			</div>
+			<DialogListContent
+				isOpen={isModalOpen}
+				onClickItem={(detail) => onClickEditPoint(detail)}
+				onClose={() => setIsModalOpen(false)}
+				content={diagnosisCephalo.current.getActionsDrawings()}
+			/>
 		</div>
 	);
 }
@@ -426,12 +441,14 @@ const ActionButton = ({
 );
 
 const DiagnosisButtons = ({
+	openModalEditPoint,
 	clearAll,
 	clearCanvasDrawing,
 	undo,
 	generateZipFile,
 	generatePdfFile,
 }: {
+	openModalEditPoint: () => void;
 	clearAll: () => void;
 	clearCanvasDrawing: () => void;
 	undo: () => void;
@@ -439,6 +456,7 @@ const DiagnosisButtons = ({
 	generatePdfFile: () => void;
 }) => (
 	<div className="flex gap-1">
+		<ActionButton onClick={openModalEditPoint} icon={Pencil} label="Edit Point" />
 		<ActionButton onClick={clearAll} icon={Trash2} label="Remove Image" />
 		<ActionButton onClick={clearCanvasDrawing} icon={Eraser} label="Clean Canvas" />
 		<ActionButton onClick={() => undo()} icon={Undo2} label="Undo" />
@@ -491,14 +509,12 @@ const ImageSection = ({
 
 const TableSection = ({
 	result,
-	steps,
-	currentStep,
+	isCompleted,
 	stepContent,
 	handleToggleChange,
 }: {
 	result: Result;
-	steps: Step[];
-	currentStep: number;
+	isCompleted:boolean;
 	stepContent: StateDescriptionModel;
 	setResult: React.Dispatch<React.SetStateAction<Result>>;
 	handleToggleChange: (key: string, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -592,7 +608,7 @@ const TableSection = ({
 	return (
 		<div className="h-full">
 			<div className="flex flex-col">
-				{currentStep === steps.length ? (
+				{isCompleted ? (
 					<table className="w-full text-xs text-left rtl:text-right text-gray-500 border-t border-gray-300 align-middle">
 						<tbody>
 							{renderTable(measurementHeaders, measurementData(result), "bg-red-200", "text-red-500")}
@@ -623,8 +639,7 @@ const TableSection = ({
 
 const DiagnosisTab = ({
 	selectedImage,
-	steps,
-	currentStep,
+	isCompleted,
 	stepContent,
 	setResult,
 	canvasRef,
@@ -634,8 +649,7 @@ const DiagnosisTab = ({
 	diagnosis,
 }: {
 	selectedImage: File | null;
-	steps: Step[];
-	currentStep: number;
+	isCompleted: boolean;
 	stepContent: StateDescriptionModel;
 	setResult: React.Dispatch<React.SetStateAction<Result>>;
 	canvasRef: React.RefObject<CanvasRef>;
@@ -653,8 +667,7 @@ const DiagnosisTab = ({
 		/>
 		<TableSection
 			result={result}
-			steps={steps}
-			currentStep={currentStep}
+			isCompleted={isCompleted}
 			stepContent={stepContent}
 			setResult={setResult}
 			handleToggleChange={handleToggleChange}
@@ -675,7 +688,7 @@ const OtherTab = ({
 }) => (
 	<div className="h-full flex flex-col w-1/2">
 		{selectedImage ? (
-			<div className="relative w-[600px] h-[600px] border border-gray-200">
+			<div className={`relative w-[${CANVAS_CONFIG.size}px] h-[${CANVAS_CONFIG.size}px] border border-gray-200`}>
 				<FabricJSCanvas className="absolute inset-0 w-full h-full" onReady={onBackgroundReady} />
 				<FabricJSCanvas className="absolute inset-0 w-full h-full" onReady={onDrawingReady} />
 			</div>

@@ -8,9 +8,11 @@ export class DtPointState extends CephaloState {
     executeLine(): void {
         const dtPoint = this.diagnosis.findDrawingAction(PointName.Dt)
         const enPoint = this.diagnosis.findDrawingAction(PointName.EN)
-        if (dtPoint && enPoint) {
+        if (dtPoint) {
             this.diagnosis.drawText(PointName.Dt, { x: dtPoint.startX, y: dtPoint.startY })
             this.diagnosis.drawPoint({ x: dtPoint.startX, y: dtPoint.startY })
+        }
+        if (dtPoint && enPoint) {
             this.diagnosis.drawLine({ x: dtPoint.startX, y: dtPoint.startY }, { x: enPoint.startX, y: enPoint.startY })
         }
     }
@@ -42,4 +44,11 @@ export class DtPointState extends CephaloState {
         };
     }
 
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Dt);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetDPoint)
+        }
+        return !isValid;
+    }
 }

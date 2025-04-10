@@ -8,9 +8,11 @@ export class PoPointState extends CephaloState {
     executeLine(): void {
         const nPoint = this.diagnosis.findDrawingAction(PointName.N)
         const poPoint = this.diagnosis.findDrawingAction(PointName.Po)
-        if (nPoint && poPoint) {
+        if (poPoint) {
             this.diagnosis.drawText(PointName.Po, { x: poPoint.startX, y: poPoint.startY })
             this.diagnosis.drawPoint({ x: poPoint.startX, y: poPoint.startY })
+        }
+        if (nPoint && poPoint) {
             this.diagnosis.drawLine({ x: nPoint.startX, y: nPoint.startY }, { x: poPoint.startX, y: poPoint.startY })
         }
     }
@@ -40,5 +42,13 @@ export class PoPointState extends CephaloState {
             description: "Set point of Po",
             imagePath: "/assets/images/sample/Po.webp"
         };
+    }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Po);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetMeToLrLine)
+        }
+        return !isValid;
     }
 }

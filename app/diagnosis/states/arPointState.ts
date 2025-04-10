@@ -41,4 +41,12 @@ export class ARPointState extends CephaloState {
             imagePath: "/assets/images/sample/Ar.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Ar);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetB1Point)
+        }
+        return !isValid;
+    }
 }

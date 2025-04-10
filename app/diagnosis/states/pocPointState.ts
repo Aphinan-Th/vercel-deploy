@@ -50,4 +50,12 @@ export class POCLineState extends CephaloState {
             imagePath: "/assets/images/sample/PoC.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.PoC);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetCompleted)
+        }
+        return !isValid;
+    }
 }

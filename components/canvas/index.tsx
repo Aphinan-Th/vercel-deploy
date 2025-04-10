@@ -2,14 +2,15 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { CanvasHandler, CanvasProps, Point } from "../../app/diagnosis/model/type";
+import { CANVAS_CONFIG } from "../../app/base-const";
 
 const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 	{ imageFile, diagnosis },
 	ref
 ) {
 
-	const fixedWidth = 600;
-	const fixedHeight = 600;
+	const fixedWidth = CANVAS_CONFIG.size;
+	const fixedHeight = CANVAS_CONFIG.size;
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const [image, setImage] = useState<HTMLImageElement>();
 
@@ -131,7 +132,7 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 		}
 	};
 
-	return <canvas id="canvas" ref={canvasRef} className="border border-grey-300 " width={600} height={600} onMouseDown={startDrawing} onMouseUp={endDrawing} style={{
+	return <canvas id="canvas" ref={canvasRef} className="border border-grey-300 " width={fixedWidth} height={fixedHeight} onMouseDown={startDrawing} onMouseUp={endDrawing} style={{
 		imageRendering: "auto",
 		textRendering: "auto"
 	  }} />;

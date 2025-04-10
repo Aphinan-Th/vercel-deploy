@@ -41,4 +41,11 @@ export class LLPointState extends CephaloState {
         };
     }
 
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.LL);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetDtPoint)
+        }
+        return !isValid;
+    }
 }

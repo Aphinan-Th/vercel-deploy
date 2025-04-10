@@ -41,4 +41,12 @@ export class MpPointState extends CephaloState {
             imagePath: "/assets/images/sample/Mp.webp"
         };
     }
+    
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Mp);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetpMpPoint)
+        }
+        return !isValid;
+    }
 }

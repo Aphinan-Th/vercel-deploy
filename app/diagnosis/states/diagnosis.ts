@@ -48,6 +48,8 @@ import { SNBMeasurement } from "../measurements/strategy/snbMeasurement";
 import { LowerLipToEPlaneMeasurement } from "../measurements/strategy/lowerLipToEPlaneMeasurement";
 import { CompletedState } from "./completedState";
 import { DrawType, PointName } from "../model/enum";
+import { mapEnum as mapToPointName } from "./mappers/pointNameMapper";
+import { CANVAS_CONFIG } from "../../../app/base-const";
 
 export class DiagnosisCephalo {
     private actionDrawings: DrawDetail[] = []
@@ -58,6 +60,7 @@ export class DiagnosisCephalo {
     private state: CephaloPointState = CephaloPointState.Distance
     private indexOfState = 0
     private tempRotationAngle = 0
+    private isEditMode = false
 
     redrawImageCallBack: (rotationAngle: number) => void = () => { };
 
@@ -91,8 +94,8 @@ export class DiagnosisCephalo {
         [CephaloPointState.SetCompleted]: new CompletedState(this),
     }
 
-    onChangeState(callback: (index: number) => void) {
-        this.eventEmitter.on("changeState", () => callback(this.indexOfState));
+    onChangeState(callback: () => void) {
+        this.eventEmitter.on("changeState", () => callback());
     }
 
     onCompletedAllState(callback: (result: Result) => void) {
@@ -110,6 +113,24 @@ export class DiagnosisCephalo {
         if (this.state == CephaloPointState.SetCompleted) return
         this.drawPoint(point)
         this.allStates[this.state].click(point)
+
+        if (this.isEditMode == true) {
+            this.invalidateState()
+            this.reRenderCanvas()
+        }
+    }
+
+    private invalidateState() {
+        this.indexOfState = 0
+        for (const key in this.allStates) {
+            const isUnAdded = this.allStates[key].invalidateState()
+            if (isUnAdded == true) {
+                break;
+            } else {
+                this.indexOfState += 1
+            }
+        }
+        this.isEditMode = false
     }
 
     undo() {
@@ -118,6 +139,23 @@ export class DiagnosisCephalo {
 
     getStateContent(): StateDescriptionModel {
         return this.allStates[this.state].getStateDescription()
+    }
+
+    setEditPoint(detail: DrawDetail) {
+        const pointName = detail.pointName;
+        if (pointName) {
+            this.removePoint(detail)
+            this.isEditMode = true
+            this.setState(mapToPointName(pointName))
+            this.reRenderCanvas()
+        }
+    }
+
+    private removePoint(detail: DrawDetail) {
+        const index = this.actionDrawings.indexOf(detail, 0);
+        if (index > -1) {
+            this.actionDrawings.splice(index, 1);
+        }
     }
 
     resetState() {
@@ -135,7 +173,9 @@ export class DiagnosisCephalo {
 
     setState(state: CephaloPointState) {
         if (state === CephaloPointState.SetCompleted) {
+            this.indexOfState = Object.keys(this.allStates).length -1
             this.notifyChange("completedState")
+            this.notifyChange("changeState")
         }
         this.state = state
         this.notifyChange("changeState")
@@ -306,7 +346,7 @@ export class DiagnosisCephalo {
                 this.drawText(PointName.Pr, { x: newPointPr.x, y: newPointPr.y })
                 this.drawText(PointName.Or, { x: newPointOr.x, y: newPointOr.y })
             }
-            this.drawLine({ x: 0, y: newPointPr.y }, { x: 600, y: newPointOr.y })
+            this.drawLine({ x: 0, y: newPointPr.y }, { x: CANVAS_CONFIG.size, y: newPointOr.y })
         }
     }
 

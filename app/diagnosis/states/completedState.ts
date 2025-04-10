@@ -28,4 +28,8 @@ export class CompletedState extends CephaloState {
             imagePath: ""
         };
     }
+
+    invalidateState(): boolean {
+        return false;
+    }
 }

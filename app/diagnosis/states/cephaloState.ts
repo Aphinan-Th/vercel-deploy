@@ -9,6 +9,7 @@ export abstract class CephaloState {
     abstract undo(): void
     abstract getStateDescription(): StateDescriptionModel
     abstract executeLine(): void
+    abstract invalidateState(): boolean
 }
 
 export interface CephaloDictionary {

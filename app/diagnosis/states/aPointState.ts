@@ -8,9 +8,11 @@ export class APointState extends CephaloState {
     executeLine(): void {
         const nPoint = this.diagnosis.findDrawingAction(PointName.N)
         const aPoint = this.diagnosis.findDrawingAction(PointName.A)
-        if (nPoint && aPoint) {
+        if (aPoint) {
             this.diagnosis.drawText(PointName.A, { x: aPoint.startX, y: aPoint.startY })
             this.diagnosis.drawPoint({ x: aPoint.startX, y: aPoint.startY })
+        }
+        if (nPoint && aPoint) {
             this.diagnosis.drawLine({ x: nPoint.startX, y: nPoint.startY }, { x: aPoint.startX, y: aPoint.startY })
         }
     }
@@ -42,4 +44,11 @@ export class APointState extends CephaloState {
         };
     }
 
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.A);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetA1Point)
+        }
+        return !isValid;
+    }
 }

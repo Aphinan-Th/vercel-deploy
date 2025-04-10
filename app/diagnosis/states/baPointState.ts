@@ -40,4 +40,12 @@ export class BAPointState extends CephaloState {
             imagePath: "/assets/images/sample/Ba.webp"
         };
     }
+
+    invalidateState(): boolean {
+        const isValid = this.diagnosis.findDrawingAction(PointName.Ba);
+        if (isValid) {
+            this.diagnosis.setState(CephaloPointStep.SetENPoint)
+        }
+        return !isValid;
+    }
 }

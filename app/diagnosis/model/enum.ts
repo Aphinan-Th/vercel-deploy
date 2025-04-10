@@ -1,5 +1,4 @@
 export enum PointName {
-	FrankfortPlane = "FrankfortPlane",
 	Distance = "Distance",
 	S = "S",
 	N = "N",
@@ -26,8 +25,6 @@ export enum PointName {
 	Dt = "Dt",
 	D = "D",
 	PoC = "PoC",
-	NToPo = "N to Po",
-	Gn = "Gn"
 }
 
 export enum DrawType {
