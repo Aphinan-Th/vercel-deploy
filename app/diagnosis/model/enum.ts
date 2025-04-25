@@ -15,7 +15,7 @@ export enum PointName {
 	pMp = "pMp",
 	B = "B",
 	Po = "Po",
-	MeToLr = "Me to Lr",
+	MeToIr = "Me to Ir",
 	P1 = "P1",
 	P2 = "P2",
 	Ba = "Ba",

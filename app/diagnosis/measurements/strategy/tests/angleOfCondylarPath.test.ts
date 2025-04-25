@@ -27,7 +27,7 @@ describe('Angle of Condylar Path VS OCC Plane', () => {
             }
         )
         diagnosis.addActionsDrawings({
-            pointName: PointName.A1,
+            pointName: PointName.pMp,
             startX: 448,
             startY: 401,
             type: DrawType.Dot

@@ -34,8 +34,8 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 		if (canvasRef.current == null) return
 		const context = canvasRef.current.getContext("2d");
 		if (context == null) return
-		context.fillStyle = "red";
-		context.strokeStyle = "red";
+		context.fillStyle = "yellow";
+		context.strokeStyle = "yellow";
 		context.lineCap = "round";
 		context.lineJoin = "round";
 		context.lineWidth = 0.5;

@@ -28,7 +28,7 @@ export class P1PointState extends CephaloState {
 
     undo(): void {
         this.diagnosis.undoActionsDrawings()
-        this.diagnosis.setState(CephaloPointStep.SetMeToLrLine)
+        this.diagnosis.setState(CephaloPointStep.SetMeToIrLine)
     }
 
     getStateDescription(): StateDescriptionModel {

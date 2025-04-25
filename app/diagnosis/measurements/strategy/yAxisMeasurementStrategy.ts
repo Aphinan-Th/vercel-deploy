@@ -11,14 +11,14 @@ export class YAxisMeasurementStrategy implements MeasurementStrategy {
         const nPoint = this.controller.findDrawingAction(PointName.N);
         const sPoint = this.controller.findDrawingAction(PointName.S);
         const poPoint = this.controller.findDrawingAction(PointName.Po);
-        const meToLrLine = this.controller.findDrawingAction(PointName.MeToLr);
+        const meToIrLine = this.controller.findDrawingAction(PointName.MeToIr);
 
-        if (nPoint && sPoint && poPoint && meToLrLine) {
+        if (nPoint && sPoint && poPoint && meToIrLine) {
             const intersectPoint = findIntersectPointFromExtendLine(
                 { x: nPoint.startX, y: nPoint.startY },
                 { x: poPoint.startX, y: poPoint.startY },
-                { x: meToLrLine.endX ?? 0, y: meToLrLine.endY ?? 0 },
-                { x: meToLrLine.startX, y: meToLrLine.startY }
+                { x: meToIrLine.endX ?? 0, y: meToIrLine.endY ?? 0 },
+                { x: meToIrLine.startX, y: meToIrLine.startY }
             );
 
             if (intersectPoint?.x && intersectPoint?.y) {
@@ -27,7 +27,6 @@ export class YAxisMeasurementStrategy implements MeasurementStrategy {
                     startX: intersectPoint.x,
                     startY: intersectPoint.y,
                 };
-                //draw new point
                 const angleResult = getAngleFromPoints(nPoint, sPoint, gnPoint);
                 return angleResult;
             }

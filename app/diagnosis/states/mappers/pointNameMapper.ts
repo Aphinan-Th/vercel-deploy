@@ -18,7 +18,7 @@ const pointNameMapper: Record<PointName, CephaloPointStep> = {
     [PointName.pMp]: CephaloPointStep.SetpMpPoint,
     [PointName.B]: CephaloPointStep.SetBPoint,
     [PointName.Po]: CephaloPointStep.SetPoPoint,
-    [PointName.MeToLr]: CephaloPointStep.SetMeToLrLine,
+    [PointName.MeToIr]: CephaloPointStep.SetMeToIrLine,
     [PointName.P1]: CephaloPointStep.SetP1Point,
     [PointName.P2]: CephaloPointStep.SetP2Point,
     [PointName.Ba]: CephaloPointStep.SetBaPoint,

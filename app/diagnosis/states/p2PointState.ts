@@ -48,27 +48,25 @@ export class P2PointState extends CephaloState {
     private drawGoPoint() {
         const p1Point = this.diagnosis.findDrawingAction(PointName.P1)
         const p2Point = this.diagnosis.findDrawingAction(PointName.P2)
-        const meToLrLinePoint = this.diagnosis.findDrawingAction(PointName.MeToLr)
-        if (p1Point && p2Point && meToLrLinePoint) {
+        const meToIrLinePoint = this.diagnosis.findDrawingAction(PointName.MeToIr)
+        if (p1Point && p2Point && meToIrLinePoint) {
             const intersectPoint = findIntersectPointFromExtendLine(
                 { x: p1Point.startX, y: p1Point.startY },
                 { x: p2Point.startX, y: p2Point.startY },
-                { x: meToLrLinePoint.startX, y: meToLrLinePoint.startY },
-                { x: meToLrLinePoint.endX ?? 0, y: meToLrLinePoint.endY ?? 0 }
+                { x: meToIrLinePoint.startX, y: meToIrLinePoint.startY },
+                { x: meToIrLinePoint.endX ?? 0, y: meToIrLinePoint.endY ?? 0 }
             );
 
             if (intersectPoint?.x && intersectPoint?.y) {
-                this.diagnosis.setColor("yellow")
                 this.diagnosis.drawLine({ x: p1Point.startX, y: p1Point.startY }, intersectPoint)
-                this.diagnosis.drawLine({ x: meToLrLinePoint.startX, y: meToLrLinePoint.startY }, intersectPoint)
+                this.diagnosis.drawLine({ x: meToIrLinePoint.startX, y: meToIrLinePoint.startY }, intersectPoint)
                 this.diagnosis.drawPoint(intersectPoint)
                 this.diagnosis.drawPoint({ x: p1Point.startX, y: p1Point.startY })
                 this.diagnosis.drawPoint({ x: p2Point.startX, y: p2Point.startY })
-                this.diagnosis.drawPoint({ x: meToLrLinePoint.startX, y: meToLrLinePoint.startY })
-                this.diagnosis.drawPoint({ x: meToLrLinePoint.endX ?? 0, y: meToLrLinePoint.endY ?? 0 })
+                this.diagnosis.drawPoint({ x: meToIrLinePoint.startX, y: meToIrLinePoint.startY })
+                this.diagnosis.drawPoint({ x: meToIrLinePoint.endX ?? 0, y: meToIrLinePoint.endY ?? 0 })
                 this.diagnosis.drawText("Go", intersectPoint)
-                this.diagnosis.drawText("Lr", { x: meToLrLinePoint.endX ?? 0, y: meToLrLinePoint.endY ?? 0 })
-                this.diagnosis.setColor("red")
+                this.diagnosis.drawText("Ir", { x: meToIrLinePoint.endX ?? 0, y: meToIrLinePoint.endY ?? 0 })
             }
         }
     }

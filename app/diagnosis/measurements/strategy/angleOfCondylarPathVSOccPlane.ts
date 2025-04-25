@@ -9,10 +9,10 @@ export class AngleOfCondylarPath implements MeasurementStrategy {
 
     execute(): number {
         const poCPlane = this.controller.findDrawingAction(PointName.PoC);
-        const a1Point = this.controller.findDrawingAction(PointName.A1);
+        const pMpPoint = this.controller.findDrawingAction(PointName.pMp);
         const mpPoint = this.controller.findDrawingAction(PointName.Mp);
 
-        if (poCPlane && a1Point && mpPoint && poCPlane.endX && poCPlane.endY) {
+        if (poCPlane && pMpPoint && mpPoint && poCPlane.endX && poCPlane.endY) {
             let newPoCPlaneStart: Point
             let newPoCPlaneEnd: Point
             if (poCPlane.startY > poCPlane.endY) {
@@ -24,7 +24,7 @@ export class AngleOfCondylarPath implements MeasurementStrategy {
             }
             const intersectPoint = findIntersectPointFromExtendLine(
                 { x: mpPoint.startX, y: mpPoint.startY },
-                { x: a1Point.startX, y: a1Point.startY },
+                { x: pMpPoint.startX, y: pMpPoint.startY },
                 { x: newPoCPlaneStart.x, y: newPoCPlaneStart.y },
                 { x: newPoCPlaneEnd.x, y: newPoCPlaneEnd.y }
             );
@@ -42,10 +42,10 @@ export class AngleOfCondylarPath implements MeasurementStrategy {
                     endX: newPoCPlaneEnd.x,
                     endY: newPoCPlaneEnd.y,
                 }
-                if (pivotPoint.startX > a1Point.startX) {
+                if (pivotPoint.startX > pMpPoint.startX) {
                     return getAngleFromPoints(newPoCPlane, pivotPoint, mpPoint);
                 } else {
-                    return 180 - getAngleFromPoints(newPoCPlane, pivotPoint, a1Point);
+                    return 180 - getAngleFromPoints(newPoCPlane, pivotPoint, pMpPoint);
                 }
             }
         }

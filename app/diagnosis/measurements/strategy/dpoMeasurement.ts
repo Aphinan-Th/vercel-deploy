@@ -8,13 +8,13 @@ export class DpoMeasurement implements MeasurementStrategy {
 
 	execute(): number {
 		const dPoint = this.controller.findDrawingAction(PointName.D);
-		const a1Point = this.controller.findDrawingAction(PointName.A1);
+		const pMpPoint = this.controller.findDrawingAction(PointName.pMp);
 		const mpPoint = this.controller.findDrawingAction(PointName.Mp);
 
-		if (dPoint && a1Point && mpPoint) {
+		if (dPoint && pMpPoint && mpPoint) {
 			const perpendicularPoint = getPerpendicularPoint(
 				{ x: dPoint.startX, y: dPoint.startY },
-				{ x: a1Point.startX, y: a1Point.startY },
+				{ x: pMpPoint.startX, y: pMpPoint.startY },
 				{ x: mpPoint.startX, y: mpPoint.startY }
 			);
 			const distance = getDistanceBetweenPoint(

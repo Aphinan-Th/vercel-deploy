@@ -15,7 +15,7 @@ export enum CephaloPointStep {
     SetpMpPoint = "setpMpPoint",
     SetBPoint = "setBPoint",
     SetPoPoint = "setPoPoint",
-    SetMeToLrLine = "setMeToLrLine",
+    SetMeToIrLine = "setMeToIrLine",
     SetP1Point = "setP1Point",
     SetP2Point = "setP2Point",
     SetBaPoint = "setBaPoint",

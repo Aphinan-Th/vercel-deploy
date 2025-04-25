@@ -31,7 +31,7 @@ describe('Dpo', () => {
             type: DrawType.Dot
         })
         diagnosis.addActionsDrawings({
-            pointName: PointName.A1,
+            pointName: PointName.pMp,
             startX: 451,
             startY: 395,
             type: DrawType.Dot

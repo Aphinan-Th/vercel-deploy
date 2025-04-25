@@ -29,7 +29,7 @@ describe('Gonion', () => {
             type: DrawType.Dot
         })
         diagnosis.addActionsDrawings({
-            pointName: PointName.MeToLr,
+            pointName: PointName.MeToIr,
             startX: 388,
             startY: 475,
             endX: 266,

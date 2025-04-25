@@ -9,14 +9,14 @@ export class FMAMeasurementStrategy implements MeasurementStrategy {
     execute(): number {
         const prPoint = this.controller.findDrawingAction(PointName.Pr);
         const orPoint = this.controller.findDrawingAction(PointName.Or);
-        const meToLrLine = this.controller.findDrawingAction(PointName.MeToLr);
+        const meToIrLine = this.controller.findDrawingAction(PointName.MeToIr);
 
-        if (prPoint && orPoint && meToLrLine) {
+        if (prPoint && orPoint && meToIrLine) {
             const intersectPoint = findIntersectPointFromExtendLine(
                 { x: orPoint.startX, y: orPoint.startY },
                 { x: prPoint.startX, y: prPoint.startY },
-                { x: meToLrLine.endX ?? 0, y: meToLrLine.endY ?? 0 },
-                { x: meToLrLine.startX, y: meToLrLine.startY }
+                { x: meToIrLine.endX ?? 0, y: meToIrLine.endY ?? 0 },
+                { x: meToIrLine.startX, y: meToIrLine.startY }
             );
 
             if (intersectPoint?.x && intersectPoint?.y) {
@@ -25,7 +25,7 @@ export class FMAMeasurementStrategy implements MeasurementStrategy {
                     startX: intersectPoint.x,
                     startY: intersectPoint.y,
                 };
-                const angleResult = getAngleFromPoints(prPoint, pivotPoint, meToLrLine);
+                const angleResult = getAngleFromPoints(prPoint, pivotPoint, meToIrLine);
 
                 return angleResult;
             }

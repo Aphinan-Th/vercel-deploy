@@ -27,7 +27,7 @@ export class PoPointState extends CephaloState {
             }
         )
         this.executeLine()
-        this.diagnosis.setState(CephaloPointStep.SetMeToLrLine)
+        this.diagnosis.setState(CephaloPointStep.SetMeToIrLine)
     }
 
     undo(): void {
@@ -47,7 +47,7 @@ export class PoPointState extends CephaloState {
     invalidateState(): boolean {
         const isValid = this.diagnosis.findDrawingAction(PointName.Po);
         if (isValid) {
-            this.diagnosis.setState(CephaloPointStep.SetMeToLrLine)
+            this.diagnosis.setState(CephaloPointStep.SetMeToIrLine)
         }
         return !isValid;
     }

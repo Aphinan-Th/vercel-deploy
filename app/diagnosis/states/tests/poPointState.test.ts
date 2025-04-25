@@ -32,7 +32,7 @@ describe('State Po Point', () => {
             startX: 100,
             startY: 150,
         })
-        expect(mockDiagnosis.setState).toHaveBeenCalledWith(CephaloPointStep.SetMeToLrLine)
+        expect(mockDiagnosis.setState).toHaveBeenCalledWith(CephaloPointStep.SetMeToIrLine)
     });
 
     test('Po, undo should undoActionsDrawings and setState to P1', () => {
@@ -66,7 +66,7 @@ describe('State Po Point', () => {
         const actual = pointState.invalidateState()
 
         expect(actual).toBe(false)
-        expect(mockDiagnosis.setState).toHaveBeenCalledWith(CephaloPointStep.SetMeToLrLine);
+        expect(mockDiagnosis.setState).toHaveBeenCalledWith(CephaloPointStep.SetMeToIrLine);
     })
 
     test('Po, invalidateState with invalid', () => {

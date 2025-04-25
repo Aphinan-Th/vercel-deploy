@@ -39,7 +39,7 @@ describe('State P1 Point', () => {
         pointState.undo()
 
         expect(mockDiagnosis.undoActionsDrawings).toHaveBeenCalled();
-        expect(mockDiagnosis.setState).toHaveBeenCalledWith(CephaloPointStep.SetMeToLrLine);
+        expect(mockDiagnosis.setState).toHaveBeenCalledWith(CephaloPointStep.SetMeToIrLine);
     })
 
     test('P1, getStateDescription', () => {

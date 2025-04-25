@@ -2,6 +2,8 @@ import { CephaloState, StateDescriptionModel } from "./cephaloState";
 import { CephaloPointStep } from "../cephaloStep";
 import { Point } from "../model/type";
 import { PointName, DrawType } from "../model/enum";
+import { findIntersectPointFromExtendLine, generateNewPointWithExtent } from "../measurements/findPointUtils";
+import { CANVAS_CONFIG } from "../../base-const";
 
 export class POCLineState extends CephaloState {
 
@@ -11,6 +13,46 @@ export class POCLineState extends CephaloState {
             this.diagnosis.drawLine({ x: point.startX, y: point.startY }, { x: point.endX ?? 0, y: point.endY ?? 0 })
             this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
             this.diagnosis.drawPoint({ x: point.endX ?? 0, y: point.endY ?? 0 })
+        }
+        this.executeLineAngleOfCondylar()
+    }
+
+    executeLineAngleOfCondylar() {
+        const poCPlane = this.diagnosis.findDrawingAction(PointName.PoC);
+        const pMpPoint = this.diagnosis.findDrawingAction(PointName.pMp);
+        const mpPoint = this.diagnosis.findDrawingAction(PointName.Mp);
+
+        if (poCPlane && pMpPoint && mpPoint && poCPlane.endX && poCPlane.endY) {
+            let newPoCPlaneStart: Point
+            let newPoCPlaneEnd: Point
+            if (poCPlane.startY > poCPlane.endY) {
+                newPoCPlaneStart = { x: poCPlane.startX, y: poCPlane.startY }
+                newPoCPlaneEnd = { x: poCPlane.endX, y: poCPlane.endY }
+            } else {
+                newPoCPlaneStart = { x: poCPlane.endX, y: poCPlane.endY }
+                newPoCPlaneEnd = { x: poCPlane.startX, y: poCPlane.startY }
+            }
+            const intersectPoint = findIntersectPointFromExtendLine(
+                { x: mpPoint.startX, y: mpPoint.startY },
+                { x: pMpPoint.startX, y: pMpPoint.startY },
+                { x: newPoCPlaneStart.x, y: newPoCPlaneStart.y },
+                { x: newPoCPlaneEnd.x, y: newPoCPlaneEnd.y }
+            )
+
+            if (intersectPoint) {
+                this.diagnosis.drawLine({ x: poCPlane.startX, y: poCPlane.startY }, { x: intersectPoint.x, y: intersectPoint.y })
+            }
+        }
+
+    }
+
+    executeLinePMpMpToEdge() {
+        const pMpPoint = this.diagnosis.findDrawingAction(PointName.pMp);
+        const mpPoint = this.diagnosis.findDrawingAction(PointName.Mp);
+
+        if (pMpPoint && mpPoint) {
+            const pointEdge = generateNewPointWithExtent(pMpPoint.startX, pMpPoint.startY, mpPoint.startX, mpPoint.startY, CANVAS_CONFIG.size)
+            this.diagnosis.drawLine({x: pMpPoint.startX, y: pMpPoint.startY}, {x: pointEdge.x, y: pointEdge.y})
         }
     }
 

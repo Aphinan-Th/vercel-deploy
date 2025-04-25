@@ -2,18 +2,21 @@ import { CephaloState, StateDescriptionModel } from "./cephaloState";
 import { CephaloPointStep } from "../cephaloStep";
 import { Point } from "fabric";
 import { PointName, DrawType } from "../model/enum";
-import { findIntersectPointFromExtendLine } from "../measurements/findPointUtils";
+import { findIntersectPointFromExtendLine, generateNewPointWithExtent } from "../measurements/findPointUtils";
+import { CANVAS_CONFIG } from "../../base-const";
 
-export class MeToLrLineState extends CephaloState {
+export class MeToIrLineState extends CephaloState {
 
     executeLine(): void {
-        const point = this.diagnosis.findDrawingAction(PointName.MeToLr)
-        if (point) {
+        const point = this.diagnosis.findDrawingAction(PointName.MeToIr)
+        if (point && point.endX && point.endY) {
             this.diagnosis.drawPoint({ x: point.startX, y: point.startY })
             this.diagnosis.drawPoint({ x: point.endX ?? 0, y: point.endY ?? 0 })
             this.diagnosis.drawText("Me", { x: point.startX, y: point.startY })
-            this.diagnosis.drawText("Lr", { x: point.endX ?? 0, y: point.endY ?? 0 })
-            this.diagnosis.drawLine({ x: point.startX, y: point.startY }, { x: point.endX ?? 0, y: point.endY ?? 0 })
+            this.diagnosis.drawText("Ir", { x: point.endX ?? 0, y: point.endY ?? 0 })
+
+            const pointEdge = generateNewPointWithExtent(point.startX, point.startY, point.endX, point.endY, CANVAS_CONFIG.size)
+            this.diagnosis.drawLine({ x: point.startX, y: point.startY }, { x: pointEdge.x, y: pointEdge.y })
             this.drawGnPoint()
         }
     }
@@ -25,7 +28,7 @@ export class MeToLrLineState extends CephaloState {
         } else {
             this.diagnosis.addCurrentPatch(point)
             this.diagnosis.addActionsDrawings({
-                pointName: PointName.MeToLr,
+                pointName: PointName.MeToIr,
                 type: DrawType.Line,
                 startX: this.diagnosis.getCurrentPatch()[0].x,
                 startY: this.diagnosis.getCurrentPatch()[0].y,
@@ -33,7 +36,7 @@ export class MeToLrLineState extends CephaloState {
                 endY: this.diagnosis.getCurrentPatch()[1].y,
             })
             this.diagnosis.resetCurrentPatch()
-            this.diagnosis.drawText("Lr", point)
+            this.diagnosis.drawText("Ir", point)
             this.executeLine()
             this.diagnosis.setState(CephaloPointStep.SetP1Point)
         }
@@ -50,38 +53,37 @@ export class MeToLrLineState extends CephaloState {
 
     getStateDescription(): StateDescriptionModel {
         return {
-            pointName: PointName.MeToLr,
-            title: PointName.MeToLr,
-            description: "Set point of Me to Lr",
+            pointName: PointName.MeToIr,
+            title: PointName.MeToIr,
+            description: "Set point of Me to Ir",
             imagePath: "/assets/images/sample/Me.webp"
         };
     }
 
     private drawGnPoint() {
-        const meToLrLine = this.diagnosis.findDrawingAction(PointName.MeToLr)
+        const meToIrLine = this.diagnosis.findDrawingAction(PointName.MeToIr)
         const nPoint = this.diagnosis.findDrawingAction(PointName.N)
         const poPoint = this.diagnosis.findDrawingAction(PointName.Po)
-        if (poPoint && nPoint && meToLrLine) {
+        if (poPoint && nPoint && meToIrLine) {
             const gnPoint = findIntersectPointFromExtendLine(
                 { x: nPoint.startX, y: nPoint.startY },
                 { x: poPoint.startX, y: poPoint.startY },
-                { x: meToLrLine.endX ?? 0, y: meToLrLine.endY ?? 0 },
-                { x: meToLrLine.startX, y: meToLrLine.startY }
+                { x: meToIrLine.endX ?? 0, y: meToIrLine.endY ?? 0 },
+                { x: meToIrLine.startX, y: meToIrLine.startY }
             )
 
             if (gnPoint) {
                 this.diagnosis.setColor("yellow")
                 this.diagnosis.drawLine({ x: nPoint.startX, y: nPoint.startY }, gnPoint)
-                this.diagnosis.drawLine({ x: meToLrLine.startX, y: meToLrLine.startY }, gnPoint)
+                this.diagnosis.drawLine({ x: meToIrLine.startX, y: meToIrLine.startY }, gnPoint)
                 this.diagnosis.drawPoint(gnPoint)
                 this.diagnosis.drawText("Gn", gnPoint)
-                this.diagnosis.setColor("red")
             }
         }
     }
 
     invalidateState(): boolean {
-        const isValid = this.diagnosis.findDrawingAction(PointName.MeToLr);
+        const isValid = this.diagnosis.findDrawingAction(PointName.MeToIr);
         if (isValid) {
             this.diagnosis.setState(CephaloPointStep.SetP1Point)
         }

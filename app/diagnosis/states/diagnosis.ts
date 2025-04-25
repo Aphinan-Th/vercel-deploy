@@ -16,7 +16,7 @@ import { PMpPointState } from "./pMpPointState";
 import { MpPointState } from "./mpPointState";
 import { BPointState } from "./bPointState";
 import { PoPointState } from "./poPointState";
-import { MeToLrLineState } from "./meToLrLinePointState";
+import { MeToIrLineState } from "./meToIrLinePointState";
 import { P1PointState } from "./p1PointState";
 import { P2PointState } from "./p2PointState";
 import { BAPointState } from "./baPointState";
@@ -81,7 +81,7 @@ export class DiagnosisCephalo {
         [CephaloPointState.SetpMpPoint]: new PMpPointState(this),
         [CephaloPointState.SetBPoint]: new BPointState(this),
         [CephaloPointState.SetPoPoint]: new PoPointState(this),
-        [CephaloPointState.SetMeToLrLine]: new MeToLrLineState(this),
+        [CephaloPointState.SetMeToIrLine]: new MeToIrLineState(this),
         [CephaloPointState.SetP1Point]: new P1PointState(this),
         [CephaloPointState.SetP2Point]: new P2PointState(this),
         [CephaloPointState.SetBaPoint]: new BAPointState(this),
@@ -257,7 +257,7 @@ export class DiagnosisCephalo {
 
     drawText(pointName: string, point: Point) {
         if (this.context == null) return
-        this.context.font = "12px serif";
+        this.context.font = "12px";
         this.context.fillText(pointName, point.x, point.y - 8)
     }
 
