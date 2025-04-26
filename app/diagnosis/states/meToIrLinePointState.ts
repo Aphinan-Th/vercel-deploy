@@ -1,9 +1,9 @@
 import { CephaloState, StateDescriptionModel } from "./cephaloState";
 import { CephaloPointStep } from "../cephaloStep";
-import { Point } from "fabric";
 import { PointName, DrawType } from "../model/enum";
 import { findIntersectPointFromExtendLine, generateNewPointWithExtent } from "../measurements/findPointUtils";
 import { CANVAS_CONFIG } from "../../base-const";
+import { Point } from "../model/type";
 
 export class MeToIrLineState extends CephaloState {
 

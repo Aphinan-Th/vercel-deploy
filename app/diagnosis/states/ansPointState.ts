@@ -2,6 +2,8 @@ import { CephaloState, StateDescriptionModel } from "./cephaloState";
 import { CephaloPointStep } from "../cephaloStep";
 import { Point } from "../model/type";
 import { PointName, DrawType } from "../model/enum";
+import { generateNewPointWithExtent } from "../measurements/findPointUtils";
+import { CANVAS_CONFIG } from "../../base-const";
 
 export class ANSPointState extends CephaloState {
 
@@ -13,7 +15,8 @@ export class ANSPointState extends CephaloState {
             this.diagnosis.drawPoint({ x: ansPoint.startX, y: ansPoint.startY })
         }
         if (pnsPoint && ansPoint) {
-            this.diagnosis.drawLine({ x: pnsPoint.startX, y: pnsPoint.startY }, { x: ansPoint.startX, y: ansPoint.startY })
+            const pointEdge = generateNewPointWithExtent(ansPoint.startX,  ansPoint.startY,  pnsPoint.startX, pnsPoint.startY, CANVAS_CONFIG.size)
+            this.diagnosis.drawLine({ x: ansPoint.startX, y: ansPoint.startY }, { x: pointEdge.x, y: pointEdge.y })
         }
     }
 

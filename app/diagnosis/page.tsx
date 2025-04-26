@@ -186,6 +186,7 @@ export default function Diagnosis() {
 	const clearCanvasDrawing = () => {
 		diagnosisCephalo.current.resetState();
 		canvasRef.current?.redrawImage(0);
+		setIsCompleted(false);
 	};
 
 	const undoStep = () => {
