@@ -11,7 +11,16 @@ export class BAPointState extends CephaloState {
             this.diagnosis.drawText(PointName.Ba, { x: baPoint.startX, y: baPoint.startY })
             this.diagnosis.drawPoint({ x: baPoint.startX, y: baPoint.startY })
         }
+        this.executeLineSTOBa()
         return
+    }
+
+    executeLineSTOBa() {
+        const baPoint = this.diagnosis.findDrawingAction(PointName.Ba)
+        const sPoint = this.diagnosis.findDrawingAction(PointName.S)
+        if (baPoint && sPoint) {
+            this.diagnosis.drawLine({ x: baPoint.startX, y: baPoint.startY }, { x: sPoint.startX, y: sPoint.startY })
+        }
     }
 
     click(point: Point): void {
@@ -25,6 +34,7 @@ export class BAPointState extends CephaloState {
         )
         this.diagnosis.drawText(PointName.Ba, point)
         this.diagnosis.setState(CephaloPointStep.SetENPoint)
+        this.executeLineSTOBa()
     }
 
     undo(): void {

@@ -82,13 +82,13 @@ describe('State Ar Point', () => {
 
     test('Ar, executeLine with a', () => {
         const testPoint: Point = { x: 100, y: 150 }
-        const mockPointA1: DrawDetail = {
+        const mockPointAr: DrawDetail = {
             pointName: PointName.Ar,
             type: DrawType.Dot,
             startX: 100,
             startY: 150
         }
-        mockDiagnosis.findDrawingAction = jest.fn().mockReturnValue(mockPointA1)
+        mockDiagnosis.findDrawingAction = jest.fn().mockReturnValue(mockPointAr)
 
         arPointState.executeLine()
 

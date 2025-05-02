@@ -17,6 +17,7 @@ describe('State BA Point', () => {
         mockDiagnosis.addActionsDrawings = jest.fn().mockImplementation(() => { })
         mockDiagnosis.drawText = jest.fn().mockImplementation(() => { })
         mockDiagnosis.drawPoint = jest.fn().mockImplementation(() => { })
+        mockDiagnosis.drawLine = jest.fn()
         mockDiagnosis.setState = jest.fn().mockImplementation(() => { })
         mockDiagnosis.undoActionsDrawings = jest.fn().mockImplementation(() => { })
     })
@@ -81,18 +82,28 @@ describe('State BA Point', () => {
 
     test('BA, executeLine with BA', () => {
         const testPoint: Point = { x: 100, y: 150 }
-        const mockPointA1: DrawDetail = {
+        const mockPointBa: DrawDetail = {
             pointName: PointName.Ba,
             type: DrawType.Dot,
             startX: 100,
             startY: 150
         }
-        mockDiagnosis.findDrawingAction = jest.fn().mockReturnValue(mockPointA1)
+        const mockPointS: DrawDetail = {
+            pointName: PointName.Ba,
+            type: DrawType.Dot,
+            startX: 10,
+            startY: 15
+        }
+        mockDiagnosis.findDrawingAction = jest.fn()
+            .mockReturnValueOnce(mockPointBa)
+            .mockReturnValueOnce(mockPointBa)
+        .mockReturnValueOnce(mockPointS)
 
         baPointState.executeLine()
 
         expect(mockDiagnosis.drawText).toHaveBeenCalledWith(PointName.Ba, testPoint)
         expect(mockDiagnosis.drawPoint).toHaveBeenCalledWith({x: testPoint.x, y: testPoint.y})
+        expect(mockDiagnosis.drawLine).toHaveBeenCalledWith({x: testPoint.x, y: testPoint.y}, {x: 10, y: 15})
     })
 
     test('BA, executeLine without a1', () => {
