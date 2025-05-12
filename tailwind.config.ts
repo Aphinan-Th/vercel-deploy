@@ -61,6 +61,9 @@ const config: Config = {
           '5': 'hsl(var(--chart-5))',
         },
       },
+      fontFamily: {
+        'myriad': ['MyriadPro', 'sans-serif']
+      },
       keyframes: {
         'accordion-down': {
           from: {

@@ -38,6 +38,7 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 		context.strokeStyle = "yellow";
 		context.lineCap = "round";
 		context.lineJoin = "round";
+		context.font = "16px MyriadPro"
 		context.lineWidth = 0.5;
 	};
 
@@ -49,7 +50,7 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 				const centerX = fixedWidth / 2;
 				const centerY = fixedHeight / 2;
 				const angleInRadians = (rotationAngle * Math.PI) / 180
-				
+
 				canvasContext.clearRect(0, 0, fixedWidth, fixedHeight);
 				canvasContext.save();
 				canvasContext.translate(centerX, centerY);
@@ -76,7 +77,7 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 
 		const imageElement = new Image();
 		imageElement.onload = () => {
-			const { drawWidth, drawHeight} = calculateImageDimensions(imageElement);
+			const { drawWidth, drawHeight } = calculateImageDimensions(imageElement);
 			const centerX = fixedWidth / 2;
 			const centerY = fixedHeight / 2;
 
@@ -132,9 +133,9 @@ const Canvas = forwardRef<CanvasHandler, CanvasProps>(function Canvas(
 		}
 	};
 
-	return <canvas id="canvas" ref={canvasRef} className="border border-grey-300 " width={fixedWidth} height={fixedHeight} onMouseDown={startDrawing} onMouseUp={endDrawing} style={{
+	return <canvas id="canvas" ref={canvasRef} className="border border-grey-300 font-myriad" width={fixedWidth} height={fixedHeight} onMouseDown={startDrawing} onMouseUp={endDrawing} style={{
 		imageRendering: "auto",
 		textRendering: "auto"
-	  }} />;
+	}} />;
 });
 export default Canvas;

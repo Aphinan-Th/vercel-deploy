@@ -80,3 +80,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: 'MyriadPro';
+  src: url(../public/assets/fonts/MyriadPro/MyriadPro-Light.woff);
+}
