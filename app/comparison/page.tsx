@@ -28,26 +28,63 @@ export default function ComparePage() {
 	};
 
 	useEffect(() => {
-		const addImageToCanvas = (file: File | null, customType: string) => {
+		const addImageToCanvas = async (file: File | null, customType: string) => {
 			if (!file) return;
 
 			const url = URL.createObjectURL(file);
+			try {
+				const img = await loadImage(url);
+				const processedBlob = await applyFilterToImage(img, "hue-rotate(90deg)");
 
-			FabricImage.fromURL(url, { crossOrigin: "anonymous" })
-				.then((img: fabric.Image) => {
-					const existingImage = editor?.canvas
-						.getObjects()
-						.find((obj) => obj instanceof FabricImage && obj.get("customType") === customType);
+				if (processedBlob) {
+					const processedUrl = URL.createObjectURL(processedBlob);
+					await addFabricImageToCanvas(processedUrl, customType);
+					URL.revokeObjectURL(processedUrl);
+				}
+			} finally {
+				URL.revokeObjectURL(url);
+			}
+		};
 
-					if (existingImage) {
-						editor?.canvas.remove(existingImage);
-					}
-					img.set({ customType: "imageBefore" });
-					editor?.canvas.add(img.set({ left: 0, top: 0, scaleY: 0.5, scaleX: 0.5, opacity: 0.5 }));
-					editor?.canvas.centerObject(img);
-					editor?.canvas.setActiveObject(img);
-				})
-				.finally(() => URL.revokeObjectURL(url));
+		const loadImage = (src: string): Promise<HTMLImageElement> => {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.src = src;
+				img.onload = () => resolve(img);
+				img.onerror = reject;
+			});
+		};
+
+		const applyFilterToImage = (img: HTMLImageElement, filter: string): Promise<Blob | null> => {
+			return new Promise((resolve) => {
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				if (!ctx) return resolve(null);
+
+				canvas.width = img.width;
+				canvas.height = img.height;
+
+				ctx.filter = filter;
+				ctx.drawImage(img, 0, 0);
+
+				canvas.toBlob((blob) => resolve(blob), "image/png");
+			});
+		};
+
+		const addFabricImageToCanvas = async (url: string, customType: string) => {
+			const img = await FabricImage.fromURL(url, { crossOrigin: "anonymous" });
+			const existingImage = editor?.canvas
+				.getObjects()
+				.find((obj) => obj instanceof FabricImage && obj.get("customType") === customType);
+
+			if (existingImage) {
+				editor?.canvas.remove(existingImage);
+			}
+
+			img.set({ customType });
+			editor?.canvas.add(img.set({ left: 0, top: 0, scaleY: 0.5, scaleX: 0.5, opacity: 0.5 }));
+			editor?.canvas.centerObject(img);
+			editor?.canvas.setActiveObject(img);
 		};
 
 		if (imageBefore) addImageToCanvas(imageBefore, "imageBefore");
