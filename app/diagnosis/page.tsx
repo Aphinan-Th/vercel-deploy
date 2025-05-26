@@ -19,6 +19,7 @@ import {
 import html2canvas from "html2canvas";
 import JSZip from "jszip";
 import Link from "next/link";
+import Image from "next/image";
 import * as fabric from "fabric";
 import { FabricImage } from "fabric";
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
@@ -78,19 +79,19 @@ export default function Diagnosis() {
 		});
 
 		return () => {
-			cephaloInstance.onChangeState(() => { });
+			cephaloInstance.onChangeState(() => {});
 		};
 	}, []);
 
 	useEffect(() => {
 		const cephaloInstance = diagnosisCephalo.current;
 		cephaloInstance.onCompletedAllState((result) => {
-			setIsCompleted(true)
+			setIsCompleted(true);
 			setResult(result);
 		});
 
 		return () => {
-			cephaloInstance.onCompletedAllState(() => { });
+			cephaloInstance.onCompletedAllState(() => {});
 		};
 	}, []);
 
@@ -159,10 +160,10 @@ export default function Diagnosis() {
 		}
 	};
 
-	const addToothToCanvas = () => {
+	const addToothToCanvas = (url: string) => {
 		setIsDrawingMode(false);
-		FabricImage.fromURL("/assets/images/tooth.webp", { crossOrigin: "anonymous" }).then((img: fabric.Image) => {
-			drawingEditor?.canvas.add(img.set({ left: 0, top: 0, scaleY: 0.5, scaleX: 0.5, opacity: 1 }));
+		FabricImage.fromURL(url, { crossOrigin: "anonymous" }).then((img: fabric.Image) => {
+			drawingEditor?.canvas.add(img.set({ left: 0, top: 0, scaleY: 0.1, scaleX: 0.1, opacity: 1 }));
 			drawingEditor?.canvas.centerObject(img);
 			drawingEditor?.canvas.setActiveObject(img);
 		});
@@ -174,7 +175,7 @@ export default function Diagnosis() {
 
 	const openModalEditPoint = () => {
 		setIsModalOpen(true);
-	}
+	};
 
 	const clearAll = () => {
 		setSelectedImage(null);
@@ -195,9 +196,9 @@ export default function Diagnosis() {
 
 	const onClickEditPoint = (detail: DrawDetail) => {
 		setIsModalOpen(false);
-		setIsCompleted(false)
+		setIsCompleted(false);
 		diagnosisCephalo.current.setEditPoint(detail);
-	}
+	};
 
 	const handleFileSelect = (file: File) => {
 		setSelectedImage(file);
@@ -340,8 +341,9 @@ export default function Diagnosis() {
 			<Navbar onClick={() => hiddenToggle()} value={isHidden} />
 			<div className={`px-10 min-h-screen items-center justify-center ${isHidden ? "py-24" : "py-16"}`}>
 				<div
-					className={`border-b border-gray-200 dark:border-gray-700 mb-4 flex justify-between align-middle items-center ${isHidden ? "hidden" : "flex"
-						}`}
+					className={`border-b border-gray-200 dark:border-gray-700 mb-4 flex justify-between align-middle items-center ${
+						isHidden ? "hidden" : "flex"
+					}`}
 				>
 					<ul className="flex flex-wrap -mb-px text-sm font-medium text-center">
 						{[Tab.Diagnosis, Tab.Drawing].map((tab, idx) => (
@@ -466,6 +468,104 @@ const DiagnosisButtons = ({
 	</div>
 );
 
+const ToothDropdown = ({ onSelect }: { onSelect: (url: string) => void }) => {
+	const [open, setOpen] = React.useState(false);
+	const TOOTH_OPTIONS = [
+		{
+			label: "Incisor",
+			url: "/assets/images/tooth/incisor.png",
+			icon: (
+				<Image
+					src="/assets/images/tooth/incisor.png"
+					alt="Incisor"
+					width={48}
+					height={48}
+					className="inline-block"
+					style={{ objectFit: "contain", height: "1.5rem", width: "auto" }}
+				/>
+			),
+		},
+		{
+			label: "Canine",
+			url: "/assets/images/tooth/canine.png",
+			icon: (
+				<Image
+					src="/assets/images/tooth/canine.png"
+					alt="Canine"
+					width={48}
+					height={48}
+					className="inline-block"
+					style={{ objectFit: "contain", height: "1.5rem", width: "auto" }}
+				/>
+			),
+		},
+		{
+			label: "Premolar",
+			url: "/assets/images/tooth/premolar.png",
+			icon: (
+				<Image
+					src="/assets/images/tooth/premolar.png"
+					alt="Premolar"
+					width={48}
+					height={48}
+					className="inline-block"
+					style={{ objectFit: "contain", height: "1.5rem", width: "auto" }}
+				/>
+			),
+		},
+		{
+			label: "Molar",
+			url: "/assets/images/tooth/molar.png",
+			icon: (
+				<Image
+					src="/assets/images/tooth/molar.png"
+					alt="Molar"
+					width={48}
+					height={48}
+					className="inline-block"
+					style={{ objectFit: "contain", height: "1.5rem", width: "auto" }}
+				/>
+			),
+		},
+	];
+
+	const handleSelect = (url: string) => {
+		setOpen(false);
+		onSelect(url);
+	};
+
+	return (
+		<div className="relative">
+			<Button
+				variant="ghost"
+				className="text-gray-600 hover:text-gray-900 gap-1"
+				onClick={() => setOpen((v) => !v)}
+				type="button"
+			>
+				<ImagePlus width="24" height="24" /> Add Tooth
+				<svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+					<path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+				</svg>
+			</Button>
+			{open && (
+				<div className="absolute left-0 mt-2 w-36 bg-white border border-gray-200 rounded shadow-lg z-10">
+					{TOOTH_OPTIONS.map((option) => (
+						<Button
+							variant="ghost"
+							key={option.label}
+							onClick={() => handleSelect(option.url)}
+							className="justify-start w-full text-gray-600 hover:text-gray-900 gap-1"
+						>
+							{option.icon}
+							{option.label}
+						</Button>
+					))}
+				</div>
+			)}
+		</div>
+	);
+};
+
 const OtherTabButtons = ({
 	removeImageFromCanvas,
 	addToothToCanvas,
@@ -473,13 +573,13 @@ const OtherTabButtons = ({
 	generateZipFile,
 }: {
 	removeImageFromCanvas: () => void;
-	addToothToCanvas: () => void;
+	addToothToCanvas: (url: string) => void;
 	setIsDrawingMode: React.Dispatch<React.SetStateAction<boolean>>;
 	generateZipFile: () => void;
 }) => (
 	<div className="flex gap-1">
 		<ActionButton onClick={removeImageFromCanvas} icon={Trash2} label="Remove select element" />
-		<ActionButton onClick={addToothToCanvas} icon={ImagePlus} label="Add Tooth" />
+		<ToothDropdown onSelect={(url) => addToothToCanvas(url)} />
 		<ActionButton onClick={() => setIsDrawingMode(false)} icon={Move} label="Move" />
 		<ActionButton onClick={() => setIsDrawingMode(true)} icon={PenTool} label="Pen tool" />
 		<ActionButton onClick={generateZipFile} icon={Save} label="Save" />
@@ -515,7 +615,7 @@ const TableSection = ({
 	handleToggleChange,
 }: {
 	result: Result;
-	isCompleted:boolean;
+	isCompleted: boolean;
 	stepContent: StateDescriptionModel;
 	setResult: React.Dispatch<React.SetStateAction<Result>>;
 	handleToggleChange: (key: string, e: React.ChangeEvent<HTMLInputElement>) => void;
