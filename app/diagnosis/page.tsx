@@ -472,12 +472,12 @@ const ToothDropdown = ({ onSelect }: { onSelect: (url: string) => void }) => {
 	const [open, setOpen] = React.useState(false);
 	const TOOTH_OPTIONS = [
 		{
-			label: "Incisor",
-			url: "/assets/images/tooth/incisor.png",
+			label: "Lower Incisor",
+			url: "/assets/images/tooth/lower-incisor.png",
 			icon: (
 				<Image
-					src="/assets/images/tooth/incisor.png"
-					alt="Incisor"
+					src="/assets/images/tooth/lower-incisor.png"
+					alt="Lower Incisor"
 					width={48}
 					height={48}
 					className="inline-block"
@@ -486,12 +486,12 @@ const ToothDropdown = ({ onSelect }: { onSelect: (url: string) => void }) => {
 			),
 		},
 		{
-			label: "Canine",
-			url: "/assets/images/tooth/canine.png",
+			label: "Upper Incisor",
+			url: "/assets/images/tooth/upper-incisor.png",
 			icon: (
 				<Image
-					src="/assets/images/tooth/canine.png"
-					alt="Canine"
+					src="/assets/images/tooth/upper-incisor.png"
+					alt="Upper Incisor"
 					width={48}
 					height={48}
 					className="inline-block"
@@ -500,12 +500,12 @@ const ToothDropdown = ({ onSelect }: { onSelect: (url: string) => void }) => {
 			),
 		},
 		{
-			label: "Premolar",
-			url: "/assets/images/tooth/premolar.png",
+			label: "Lower Molar",
+			url: "/assets/images/tooth/lower-molar.png",
 			icon: (
 				<Image
-					src="/assets/images/tooth/premolar.png"
-					alt="Premolar"
+					src="/assets/images/tooth/lower-molar.png"
+					alt="Lower molar"
 					width={48}
 					height={48}
 					className="inline-block"
@@ -514,12 +514,12 @@ const ToothDropdown = ({ onSelect }: { onSelect: (url: string) => void }) => {
 			),
 		},
 		{
-			label: "Molar",
-			url: "/assets/images/tooth/molar.png",
+			label: "Upper Molar",
+			url: "/assets/images/tooth/upper-molar.png",
 			icon: (
 				<Image
-					src="/assets/images/tooth/molar.png"
-					alt="Molar"
+					src="/assets/images/tooth/upper-molar.png"
+					alt="Upper Molar"
 					width={48}
 					height={48}
 					className="inline-block"
